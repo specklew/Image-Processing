@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "image_processing", "image_processing\image_processing.csproj", "{378ABC1A-53F0-4444-8AC5-78FD4E4A242C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "task_1", "task_1\task_1.csproj", "{4D3AE89F-53C5-4937-8E59-41EBEF98CE03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "image_processing_core", "image_processing_core\image_processing_core.csproj", "{7D957866-54B6-4621-9D00-B9C691D1F885}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{378ABC1A-53F0-4444-8AC5-78FD4E4A242C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{378ABC1A-53F0-4444-8AC5-78FD4E4A242C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{378ABC1A-53F0-4444-8AC5-78FD4E4A242C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{378ABC1A-53F0-4444-8AC5-78FD4E4A242C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D3AE89F-53C5-4937-8E59-41EBEF98CE03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D3AE89F-53C5-4937-8E59-41EBEF98CE03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D3AE89F-53C5-4937-8E59-41EBEF98CE03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D3AE89F-53C5-4937-8E59-41EBEF98CE03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7D957866-54B6-4621-9D00-B9C691D1F885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7D957866-54B6-4621-9D00-B9C691D1F885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7D957866-54B6-4621-9D00-B9C691D1F885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7D957866-54B6-4621-9D00-B9C691D1F885}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
