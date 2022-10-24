@@ -42,4 +42,19 @@ public class Options
     
     [Option('m', "mid")]
     public Rectangle MidpointFilter { get; set; }
+    
+    [Option("mse")]
+    public bool MeanSquareError { get; set; }
+    
+    [Option("pmse")]
+    public bool PeakMeanSquareError { get; set; }
+    
+    [Option("snr")]
+    public bool SignalNoiseRatio { get; set; }
+    
+    [Option("psnr")]
+    public bool PeakSignalNoiseRatio { get; set; }
+    
+    [Option("md")]
+    public bool MaxDifference { get; set; }
 }

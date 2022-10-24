@@ -5,11 +5,11 @@ namespace image_processing_core;
 
 public struct RGB
 {
-    private int R { get; }
-    private int G {get; }
-    private int B {get; }
+    private long R { get; }
+    private long G {get; }
+    private long B {get; }
 
-    public RGB(int r, int g, int b)
+    public RGB(long r, long g, long b)
     {
         R = r;
         G = g;
@@ -20,6 +20,7 @@ public struct RGB
     {
         return new RGB(0, 0, 0);
     }
+    
     public static RGB operator *(RGB rgb, int scalar)
     {
         return new RGB(rgb.R * scalar, rgb.G * scalar, rgb.B * scalar);
@@ -57,15 +58,25 @@ public struct RGB
     
     public static bool operator >(RGB left, RGB right)
     {
-        return left.VectorLength() > right.VectorLength();
+        return left.Length() > right.Length();
     }
     
     public static bool operator <(RGB left, RGB right)
     {
-        return left.VectorLength() < right.VectorLength();
+        return left.Length() < right.Length();
+    }
+    
+    public static RGB operator ^(RGB left, int scalar)
+    {
+        return new RGB((int)Math.Pow(left.R, scalar), (int)Math.Pow(left.G, scalar), (int)Math.Pow(left.B, scalar));
     }
 
-    public double VectorLength()
+    public RGB AbsoluteValue()
+    {
+        return new RGB(Math.Abs(R), Math.Abs(G),  Math.Abs(B));
+    }
+
+    public double Length()
     {
         return Math.Sqrt(R ^ 2 + G ^ 2 + B ^ 2);
     }
@@ -85,9 +96,9 @@ public struct RGB
 
     public Color ToColor()
     {
-        int r = Math.Clamp(R, 0, 255);
-        int g = Math.Clamp(G, 0, 255);
-        int b = Math.Clamp(B, 0, 255);
+        int r = Math.Clamp((int)R, 0, 255);
+        int g = Math.Clamp((int)G, 0, 255);
+        int b = Math.Clamp((int)B, 0, 255);
         
         return Color.FromArgb(255, r, g, b);
     }
@@ -121,5 +132,10 @@ public struct RGB
     public static unsafe RGB ToRGB(byte* pixel)
     {
         return new RGB(pixel[2], pixel[1], pixel[0]);
+    }
+
+    public override string ToString()
+    {
+        return base.ToString() + " R = " + R + ", G = " + G + ", B = " + B;
     }
 }

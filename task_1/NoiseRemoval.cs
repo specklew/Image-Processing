@@ -20,6 +20,7 @@ public static class NoiseRemoval
             for (var x = 0; x < data.Width; x++)
             {
                 Vector3 meanValues = Vector3.Zero;
+                byte i = 0;
                 for (var ry = y - offsetY; ry < rect.Height + y - offsetY; ry++)
                 {
                     if(ry < 0 || ry > data.Height) continue;
@@ -30,10 +31,11 @@ public static class NoiseRemoval
                         byte* pixel = row + rx * bpp;
                         Vector3 value = RGB.ToRGB(pixel).ToVector3();
                         meanValues += Vector3.One / value;
+                        i++;
                     }
                 }
 
-                Vector3 sum = rect.Width * rect.Height * Vector3.One / meanValues;
+                Vector3 sum = i * Vector3.One / meanValues;
                 RGB.ToRGB(sum).SaveToPixel(pt + y * data.Stride + x * bpp);
             }
         }
@@ -52,6 +54,7 @@ public static class NoiseRemoval
             for (var x = 0; x < data.Width; x++)
             {
                 RGB sum = RGB.Zero();
+                int i = 0;
                 for (var ry = y - offsetY; ry < rect.Height + y - offsetY; ry++)
                 {
                     if(ry < 0 || ry > data.Height) continue;
@@ -61,10 +64,11 @@ public static class NoiseRemoval
                         if(rx < 0 || rx > data.Width) continue;
                         byte* pixel = row + rx * bpp;
                         sum += RGB.ToRGB(pixel);
+                        i++;
                     }
                 }
 
-                sum /= rect.Width * rect.Height;
+                sum /= i;
                 sum.SaveToPixel(pt + y * data.Stride + x * bpp);
             }
         }
