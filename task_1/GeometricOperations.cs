@@ -28,4 +28,33 @@ public static class GeometricOperations
             }
         }
     }
+    
+    public static unsafe void HorizontalFlip(BitmapData data)
+    {
+        var pt = (byte*)data.Scan0;
+        int bpp = data.Stride / data.Width;
+
+        for (var y = 0; y < data.Height; y++)
+        {
+            byte* row = pt + y * data.Stride;
+
+            for (var x = 0; x < data.Width / 2; x++)
+            {
+                byte* pixel1 = row + x * bpp;
+                byte* pixel2 = row + (data.Width - x) * bpp;
+
+                var rgb1 = RGB.ToRGB(pixel1);
+                var rgb2 = RGB.ToRGB(pixel2);
+                
+                rgb2.SaveToPixel(pixel1);
+                rgb1.SaveToPixel(pixel2);
+            }
+        }
+    }
+    
+    public static void DiagonalFlip(BitmapData data)
+    {
+        VerticalFlip(data);
+        HorizontalFlip(data);
+    }
 }

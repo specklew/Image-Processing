@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using System.Drawing;
+using CommandLine;
 // ReSharper disable All
 #pragma warning disable CS8618
 
@@ -20,4 +21,25 @@ public class Options
     
     [Option('v', "vflip")]
     public bool VerticalFlip { get; set; }
+    
+    [Option('h', "hflip")]
+    public bool HorizontalFlip { get; set; }
+    
+    [Option('d', "dflip")]
+    public bool DiagonalFlip { get; set; }
+    
+    [Option('s', "shrink")]
+    public float Shrink { get; set; }
+    
+    [Option('e', "enlarge")]
+    public float Enlarge { get; set; }
+    
+    [Option('h', "hmean")]
+    public Rectangle HarmonicMeanFilter { get; set; }
+    
+    [Option('a', "amean")]
+    public Rectangle ArithmeticMeanFilter { get; set; }
+    
+    [Option('m', "mid")]
+    public Rectangle MidpointFilter { get; set; }
 }

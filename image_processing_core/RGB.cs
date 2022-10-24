@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Numerics;
 
 namespace image_processing_core;
 
@@ -13,6 +14,11 @@ public struct RGB
         R = r;
         G = g;
         B = b;
+    }
+
+    public static RGB Zero()
+    {
+        return new RGB(0, 0, 0);
     }
     public static RGB operator *(RGB rgb, int scalar)
     {
@@ -49,6 +55,21 @@ public struct RGB
         return new RGB(left.R - right.R, left.G - right.G, left.B - right.B);
     }
     
+    public static bool operator >(RGB left, RGB right)
+    {
+        return left.VectorLength() > right.VectorLength();
+    }
+    
+    public static bool operator <(RGB left, RGB right)
+    {
+        return left.VectorLength() < right.VectorLength();
+    }
+
+    public double VectorLength()
+    {
+        return Math.Sqrt(R ^ 2 + G ^ 2 + B ^ 2);
+    }
+    
     public RGB ChangeContrast(int factor)
     {
         var r = (int)Math.Truncate((double)(factor * (R - 128) + 128));
@@ -69,6 +90,16 @@ public struct RGB
         int b = Math.Clamp(B, 0, 255);
         
         return Color.FromArgb(255, r, g, b);
+    }
+
+    public Vector3 ToVector3()
+    {
+        return new Vector3(R, G, B);
+    }
+
+    public static RGB ToRGB(Vector3 vector3)
+    {
+        return new RGB((int)vector3.X, (int)vector3.Y, (int)vector3.Z);
     }
 
     public static RGB ToRGB(Color color)
