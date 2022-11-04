@@ -3,13 +3,27 @@ using System.Numerics;
 
 namespace image_processing_core;
 
-public struct RGB
+public readonly struct RGB
 {
-    private long R { get; }
-    private long G {get; }
-    private long B {get; }
+    public short R { get; }
+    public short G {get; }
+    public short B {get; }
 
     public RGB(long r, long g, long b)
+    {
+        R = (short)r;
+        G = (short)g;
+        B = (short)b;
+    }
+    
+    public RGB(int r, int g, int b)
+    {
+        R = (short)r;
+        G = (short)g;
+        B = (short)b;
+    }
+    
+    public RGB(short r, short g, short b)
     {
         R = r;
         G = g;
@@ -20,7 +34,9 @@ public struct RGB
     {
         return new RGB(0, 0, 0);
     }
-    
+
+    #region RGB Operators
+
     public static RGB operator *(RGB rgb, int scalar)
     {
         return new RGB(rgb.R * scalar, rgb.G * scalar, rgb.B * scalar);
@@ -66,10 +82,41 @@ public struct RGB
         return left.Length() < right.Length();
     }
     
-    public static RGB operator ^(RGB left, int scalar)
+    #endregion
+    
+    #region RGB64 Operators
+
+    public static RGB operator *(RGB rgb, RGB64 right)
     {
-        return new RGB((int)Math.Pow(left.R, scalar), (int)Math.Pow(left.G, scalar), (int)Math.Pow(left.B, scalar));
+        return new RGB(rgb.R * right.R, rgb.G * right.G, rgb.B * right.B);
     }
+
+    public static RGB operator +(RGB left, RGB64 right)
+    {
+        return new RGB(left.R + right.R, left.G + right.G, left.B + right.B);
+    }
+    
+    public static RGB operator /(RGB left, RGB64 right)
+    {
+        return new RGB(left.R / right.R, left.G / right.G, left.B / right.B);
+    }
+    
+    public static RGB operator -(RGB left, RGB64 right)
+    {
+        return new RGB(left.R - right.R, left.G - right.G, left.B - right.B);
+    }
+    
+    public static bool operator >(RGB left, RGB64 right)
+    {
+        return left.Length() > right.Length();
+    }
+    
+    public static bool operator <(RGB left, RGB64 right)
+    {
+        return left.Length() < right.Length();
+    }
+
+    #endregion
 
     public RGB AbsoluteValue()
     {
@@ -80,12 +127,17 @@ public struct RGB
     {
         return Math.Sqrt(R ^ 2 + G ^ 2 + B ^ 2);
     }
+
+    public bool ContainsZero()
+    {
+        return R == 0 || B == 0 || G == 0;
+    }
     
     public RGB ChangeContrast(int factor)
     {
-        var r = (int)Math.Truncate((double)(factor * (R - 128) + 128));
-        var g = (int)Math.Truncate((double)(factor * (G - 128) + 128));
-        var b = (int)Math.Truncate((double)(factor * (B - 128) + 128));
+        int r = factor * (R - 128) + 128;
+        int g = factor * (G - 128) + 128;
+        int b = factor * (B - 128) + 128;
         return new RGB(r, g, b);
     }
     
@@ -110,7 +162,7 @@ public struct RGB
 
     public static RGB ToRGB(Vector3 vector3)
     {
-        return new RGB((int)vector3.X, (int)vector3.Y, (int)vector3.Z);
+        return new RGB((short)vector3.X, (short)vector3.Y, (short)vector3.Z);
     }
 
     public static RGB ToRGB(Color color)
@@ -120,9 +172,9 @@ public struct RGB
 
     public unsafe void SaveToPixel(byte* pixel)
     {
-        var r = (byte)Math.Clamp(R, 0, 255);
-        var g = (byte)Math.Clamp(G, 0, 255);
-        var b = (byte)Math.Clamp(B, 0, 255);
+        var r = (byte)Math.Clamp((int)R, 0, 255);
+        var g = (byte)Math.Clamp((int)G, 0, 255);
+        var b = (byte)Math.Clamp((int)B, 0, 255);
 
         pixel[2] = r;
         pixel[1] = g;
@@ -136,6 +188,6 @@ public struct RGB
 
     public override string ToString()
     {
-        return base.ToString() + " R = " + R + ", G = " + G + ", B = " + B;
+        return $"{base.ToString()} R = {R}, G = {G}, B = {B}";
     }
 }

@@ -10,38 +10,41 @@ public class Options
     [Value(0)]
     public string FilePath { get; set; }
 
-    [Option('b', "brightness")]
+    [Option("brightness")]
     public byte Brightness { get; set; }
 
-    [Option('c', "contrast")]
+    [Option("contrast")]
     public byte Contrast { get; set; }
     
-    [Option('n', "negative")]
+    [Option("negative")]
     public bool Negative { get; set; }
     
-    [Option('v', "vflip")]
+    [Option("vflip")]
     public bool VerticalFlip { get; set; }
     
-    [Option('h', "hflip")]
+    [Option("hflip")]
     public bool HorizontalFlip { get; set; }
     
-    [Option('d', "dflip")]
+    [Option("dflip")]
     public bool DiagonalFlip { get; set; }
     
-    [Option('s', "shrink")]
+    [Option("shrink")]
     public float Shrink { get; set; }
     
-    [Option('e', "enlarge")]
+    [Option("enlarge")]
     public float Enlarge { get; set; }
     
-    [Option('h', "hmean")]
+    [Option("hmean")]
     public Rectangle HarmonicMeanFilter { get; set; }
     
-    [Option('a', "amean")]
+    [Option("amean")]
     public Rectangle ArithmeticMeanFilter { get; set; }
     
-    [Option('m', "mid")]
+    [Option("mid")]
     public Rectangle MidpointFilter { get; set; }
+    
+    [Option("median")]
+    public Rectangle MedianFilter { get; set; }
     
     [Option("mse")]
     public bool MeanSquareError { get; set; }

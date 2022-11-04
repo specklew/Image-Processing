@@ -1,5 +1,6 @@
 ﻿using System.Drawing.Imaging;
 using image_processing_core;
+using JetBrains.Profiler.Api;
 
 namespace task_1;
 
@@ -28,7 +29,7 @@ public static class ElementaryOperations
     
     public static unsafe void ModifyContrast(BitmapData data, byte contrast)
     {
-        int factor = (259 * (contrast + 255)) / (255 * (259 - contrast));
+        int factor = 259 * (contrast + 255) / (255 * (259 - contrast));
         
         var pt = (byte*)data.Scan0;
         int bpp = data.Stride / data.Width;
@@ -52,6 +53,7 @@ public static class ElementaryOperations
     {
         var pt = (byte*)data.Scan0;
         int bpp = data.Stride / data.Width;
+        
 
         for (var y = 0; y < data.Height; y++)
         {

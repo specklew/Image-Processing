@@ -14,7 +14,7 @@ public static class AnalysisOperations
         int bpp1 = data1.Stride / data1.Width;
         int bpp2 = data2.Stride / data2.Width;
 
-        RGB sum = RGB.Zero();
+        RGB64 sum = RGB64.Zero();
         
         for (var y = 0; y < data1.Height; y++)
         {
@@ -30,7 +30,7 @@ public static class AnalysisOperations
                 var rgb2 = RGB.ToRGB(pixel2);
 
                 rgb1 -= rgb2;
-                rgb1 ^= 2;
+                rgb1 *= rgb1;
                 sum += rgb1;
             }
         }
@@ -47,7 +47,7 @@ public static class AnalysisOperations
         int bpp1 = data1.Stride / data1.Width;
         int bpp2 = data2.Stride / data2.Width;
 
-        RGB sum = RGB.Zero();
+        RGB64 sum = RGB64.Zero();
         RGB max = RGB.Zero();
         
         for (var y = 0; y < data1.Height; y++)
@@ -66,7 +66,7 @@ public static class AnalysisOperations
                 if (rgb1 > max) max = rgb1;
                 
                 rgb1 -= rgb2;
-                rgb1 ^= 2;
+                rgb1 *= rgb1;
                 sum += rgb1;
             }
         }
@@ -85,8 +85,8 @@ public static class AnalysisOperations
         int bpp1 = data1.Stride / data1.Width;
         int bpp2 = data2.Stride / data2.Width;
 
-        RGB initialSum = RGB.Zero();
-        RGB sum = RGB.Zero();
+        RGB64 initialSum = RGB64.Zero();
+        RGB64 sum = RGB64.Zero();
         
         for (var y = 0; y < data1.Height; y++)
         {
@@ -98,13 +98,13 @@ public static class AnalysisOperations
                 byte* pixel1 = row1 + x * bpp1;
                 byte* pixel2 = row2 + x * bpp2;
 
-                var rgb1 = RGB.ToRGB(pixel1);
-                var rgb2 = RGB.ToRGB(pixel2);
+                RGB64 rgb1 = RGB64.ToRGB(pixel1);
+                RGB64 rgb2 = RGB64.ToRGB(pixel2);
                 
-                initialSum += rgb1 ^ 2;
+                initialSum += rgb1 * rgb1;
 
                 rgb1 -= rgb2;
-                rgb1 ^= 2;
+                rgb1 *= rgb1;
                 sum += rgb1;
             }
         }
@@ -123,7 +123,7 @@ public static class AnalysisOperations
         int bpp2 = data2.Stride / data2.Width;
 
         RGB max = RGB.Zero();
-        RGB sum = RGB.Zero();
+        RGB64 sum = RGB64.Zero();
         
         for (var y = 0; y < data1.Height; y++)
         {
@@ -141,7 +141,7 @@ public static class AnalysisOperations
                 if (rgb1 > max) max = rgb1;
                 
                 rgb1 -= rgb2;
-                rgb1 ^= 2;
+                rgb1 *= rgb1;
                 sum += rgb1;
             }
         }
