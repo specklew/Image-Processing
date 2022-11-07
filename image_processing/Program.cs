@@ -14,7 +14,7 @@ public static class Program
     {
         Parser.Default.ParseArguments<Options>(args).WithParsed(t =>
         {
-            Bitmap bitmap = ImageIO.LoadImage($"{t.FilePath}\\original.bmp");
+            Bitmap bitmap = ImageIO.LoadImage($"{t.FilePath}\\noise.bmp");
             BitmapData data = ImageIO.LockPixels(bitmap);
             
             Elementary(t, data);

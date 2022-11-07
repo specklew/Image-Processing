@@ -6,7 +6,7 @@ namespace task_1;
 
 public static class ElementaryOperations
 {
-    public static unsafe void ModifyBrightness(BitmapData data, byte brightness)
+    public static unsafe void ModifyBrightness(BitmapData data, int brightness)
     {
 
         var pt = (byte*)data.Scan0;
@@ -27,9 +27,10 @@ public static class ElementaryOperations
         }
     }
     
-    public static unsafe void ModifyContrast(BitmapData data, byte contrast)
+    public static unsafe void ModifyContrast(BitmapData data, int contrast)
     {
-        int factor = 259 * (contrast + 255) / (255 * (259 - contrast));
+        float factor = 259 * (contrast + 255);
+        factor /= 255 * (259 - contrast);   
         
         var pt = (byte*)data.Scan0;
         int bpp = data.Stride / data.Width;

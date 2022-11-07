@@ -102,4 +102,9 @@ public static class MathHelper
             (g[mid] + g[mid - 1])/2,
             (b[mid] + b[mid - 1])/2);
     }
+
+    public static float Mean(this Vector3 vector3)
+    {
+        return (vector3.X + vector3.Y + vector3.Z) / 3;
+    }
 }

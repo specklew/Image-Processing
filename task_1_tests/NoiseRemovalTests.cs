@@ -2,6 +2,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Numerics;
 using image_processing;
+using image_processing_core;
 using task_1;
 
 namespace task_1_tests;
@@ -10,9 +11,7 @@ namespace task_1_tests;
 public class NoiseRemovalTests
 {
     private const string TestPath = "C:\\Studia\\2022_Winter\\Image Processing\\Labs\\lenna";
-    private const string SavePath = "C:\\Studia\\2022_Winter\\Image Processing\\Labs\\test";
-
-    private int _current;
+    private const string SavePath = "C:\\Studia\\2022_Winter\\Image Processing\\Labs\\tests\\noise_removal";
     
     private Bitmap _bitmap = null!;
     private Bitmap _noise = null!;
@@ -72,7 +71,26 @@ public class NoiseRemovalTests
         NoiseRemoval.MedianFilter(_data, new Rectangle(0, 0, 7, 7));
     }
 
-    [TearDown]
+    [Test]
+    public void HarmonicMeanTest9X9()
+    {
+        NoiseRemoval.HarmonicFilter(_data, new Rectangle(0, 0, 9, 9));
+    }
+    
+    [Test]
+    public void MedianTest9X9()
+    {
+        NoiseRemoval.MedianFilter(_data, new Rectangle(0, 0, 9, 9));
+    }
+    
+    [Test]
+    public void MedianAndHarmonicTest3X3()
+    {
+        NoiseRemoval.HarmonicFilter(_data, new Rectangle(0,0,3,3));
+        NoiseRemoval.MedianFilter(_data, new Rectangle(0, 0, 3, 3));
+    }
+    
+    [TearDown] 
     public void TearDown()
     {
         Vector3 initialMse = AnalysisOperations.MeanSquareError(_originalData, _noiseData);
@@ -87,29 +105,28 @@ public class NoiseRemovalTests
         Vector3 resultPsnr = AnalysisOperations.PeakSignalNoiseRatio(_originalData, _data);
         Vector3 resultMd = AnalysisOperations.MaxDifference(_originalData, _data);
 
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Mean Square Error", "R", "G", "B");
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Original - Noise", initialMse.X, initialMse.Y, initialMse.Z);
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}\n", "Original - Result", resultMse.X, resultMse.Y, resultMse.Z);
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Mean Square Error", "R", "G", "B", "Mean");
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Original - Noise", initialMse.X, initialMse.Y, initialMse.Z, initialMse.Mean());
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}\n", "Original - Result", resultMse.X, resultMse.Y, resultMse.Z, resultMse.Mean());
         
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Peak Mean Square Error", "R", "G", "B");
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Original - Noise", initialPmse.X, initialPmse.Y, initialPmse.Z);
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}\n", "Original - Result", resultPmse.X, resultPmse.Y, resultPmse.Z);
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Peak Mean Square Error", "R", "G", "B", "Mean");
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Original - Noise", initialPmse.X, initialPmse.Y, initialPmse.Z, initialPmse.Mean());
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}\n", "Original - Result", resultPmse.X, resultPmse.Y, resultPmse.Z, resultPmse.Mean());
 
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Signal Noise Ratio", "R", "G", "B");
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Original - Noise", initialSnr.X, initialSnr.Y, initialSnr.Z);
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}\n", "Original - Result", resultSnr.X, resultSnr.Y, resultSnr.Z);
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Signal Noise Ratio", "R", "G", "B", "Mean");
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Original - Noise", initialSnr.X, initialSnr.Y, initialSnr.Z, initialSnr.Mean());
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}\n", "Original - Result", resultSnr.X, resultSnr.Y, resultSnr.Z, resultSnr.Mean());
         
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Peak Signal Noise Ratio", "R", "G", "B");
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Original - Noise", initialPsnr.X, initialPsnr.Y, initialPsnr.Z);
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}\n", "Original - Result", resultPsnr.X, resultPsnr.Y, resultPsnr.Z);
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Peak Signal Noise Ratio", "R", "G", "B", "Mean");
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Original - Noise", initialPsnr.X, initialPsnr.Y, initialPsnr.Z, initialPsnr.Mean());
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}\n", "Original - Result", resultPsnr.X, resultPsnr.Y, resultPsnr.Z, resultPsnr.Mean());
         
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Max Difference", "R", "G", "B");
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}", "Original - Noise", initialMd.X, initialMd.Y, initialMd.Z);
-        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}\n", "Original - Result", resultMd.X, resultMd.Y, resultMd.Z);
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Max Difference", "R", "G", "B", "Mean");
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}", "Original - Noise", initialMd.X, initialMd.Y, initialMd.Z, initialMd.Mean());
+        Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12} | {4,-12}\n", "Original - Result", resultMd.X, resultMd.Y, resultMd.Z, resultMd.Mean());
         
         _bitmap.UnlockBits(_data);
-        _current++;
-        Console.WriteLine($"Saving current operation under: {SavePath}\\{_current}.bmp\n");
-        ImageIO.SaveImage(_bitmap, $"{SavePath}\\{_current}.bmp");
+        Console.WriteLine($"Saving current operation under: {SavePath}\\{TestContext.CurrentContext.Test.Name}.bmp\n");
+        ImageIO.SaveImage(_bitmap, $"{SavePath}\\{TestContext.CurrentContext.Test.Name}.bmp");
     }
 }

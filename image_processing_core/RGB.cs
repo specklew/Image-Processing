@@ -133,11 +133,11 @@ public readonly struct RGB
         return R == 0 || B == 0 || G == 0;
     }
     
-    public RGB ChangeContrast(int factor)
+    public RGB ChangeContrast(float factor)
     {
-        int r = factor * (R - 128) + 128;
-        int g = factor * (G - 128) + 128;
-        int b = factor * (B - 128) + 128;
+        var r = (int)(factor * (R - 128) + 128);
+        var g = (int)(factor * (G - 128) + 128);
+        var b = (int)(factor * (B - 128) + 128);
         return new RGB(r, g, b);
     }
     
