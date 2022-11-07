@@ -119,24 +119,24 @@ public static class NoiseRemoval
 
         for (var y = 0; y < data.Height; y++)
         {
+            byte* row = pt + y * data.Stride;
             for (var x = 0; x < data.Width; x++)
             {
+                byte* pixel = row + x * bpp;
                 var rgbs = new List<RGB>();
                 for (int ry = y - offsetY; ry < rect.Height + y - offsetY; ry++)
                 {
-                    if(ry < 0 || ry > data.Height) continue;
-                    byte* row = pt + ry * data.Stride;
+                    if(ry < 0 || ry >= data.Height) continue;
+                    byte* rRow = pt + ry * data.Stride;
                     for (int rx = x - offsetX; rx < rect.Width + x - offsetX; rx++)
                     {
-                        if(rx < 0 || rx > data.Width) continue;
-                        byte* pixel = row + rx * bpp;
-                        rgbs.Add(RGB.ToRGB(pixel));
+                        if(rx < 0 || rx >= data.Width) continue;
+                        byte* rPixel = rRow + rx * bpp;
+                        rgbs.Add(RGB.ToRGB(rPixel));
                     }
                 }
-
-                rgbs.Sort(new RGBComparer());
                 
-                rgbs[rgbs.Count / 2].SaveToPixel(pt + y * data.Stride + x * bpp);
+                MathHelper.MedianRGB(rgbs.ToArray()).SaveToPixel(pixel);
             }
         }
     }

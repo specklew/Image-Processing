@@ -74,4 +74,32 @@ public static class MathHelper
         t = pixelPos.Y;
         return PerlinInterpolationRGB(rgb1, rgb2, t);
     }
+
+    public static RGB MedianRGB(RGB[] rgbs)
+    {
+        int length = rgbs.Length;
+        
+        var r = new int[length];
+        var g = new int[length];
+        var b = new int[length];
+
+        for (var i = 0; i < length; i++)
+        {
+            r[i] = rgbs[i].R;
+            g[i] = rgbs[i].G;
+            b[i] = rgbs[i].B;
+        }
+
+        Array.Sort(r);
+        Array.Sort(g);
+        Array.Sort(b);
+
+        int mid = length / 2;
+        if(length % 2 == 0) return new RGB(r[mid], g[mid], b[mid]);
+        
+        return new RGB(
+            (r[mid] + r[mid - 1])/2,
+            (g[mid] + g[mid - 1])/2,
+            (b[mid] + b[mid - 1])/2);
+    }
 }

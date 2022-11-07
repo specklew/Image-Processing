@@ -44,7 +44,7 @@ public static class GeometricOperations
             for (var x = 0; x < data.Width / 2; x++)
             {
                 byte* pixel1 = row + x * bpp;
-                byte* pixel2 = row + (data.Width - x) * bpp;
+                byte* pixel2 = row + (data.Width - x - 1) * bpp;
 
                 var rgb1 = RGB.ToRGB(pixel1);
                 var rgb2 = RGB.ToRGB(pixel2);

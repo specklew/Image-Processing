@@ -10,6 +10,9 @@ namespace task_1_tests;
 public class NoiseRemovalTests
 {
     private const string TestPath = "C:\\Studia\\2022_Winter\\Image Processing\\Labs\\lenna";
+    private const string SavePath = "C:\\Studia\\2022_Winter\\Image Processing\\Labs\\test";
+
+    private int _current;
     
     private Bitmap _bitmap = null!;
     private Bitmap _noise = null!;
@@ -27,36 +30,48 @@ public class NoiseRemovalTests
         _bitmap = ImageIO.LoadImage($"{TestPath}\\noise.bmp");
         _noise = ImageIO.LoadImage($"{TestPath}\\noise.bmp");
         _original = ImageIO.LoadImage($"{TestPath}\\original.bmp");
-        
+
         _data = ImageIO.LockPixels(_bitmap);
         _noiseData = ImageIO.LockPixels(_noise);
         _originalData = ImageIO.LockPixels(_original);
     }
 
     [Test]
-    public void HarmonicMeanTest()
+    public void HarmonicMeanTest3X3()
     {
         NoiseRemoval.HarmonicFilter(_data, new Rectangle(0, 0, 3, 3));
     }
     
     [Test]
-    public void MedianTest()
+    public void MedianTest3X3()
     {
         NoiseRemoval.MedianFilter(_data, new Rectangle(0, 0, 3, 3));
     }
     
     [Test]
-    public void ArithmeticMeanTest()
+    public void HarmonicMeanTest5X5()
     {
-        NoiseRemoval.ArithmeticMeanFilter(_data, new Rectangle(0, 0, 3, 3));
+        NoiseRemoval.HarmonicFilter(_data, new Rectangle(0, 0, 5, 5));
     }
     
     [Test]
-    public void MidpointTest()
+    public void MedianTest5X5()
     {
-        NoiseRemoval.MidpointFilter(_data, new Rectangle(0, 0, 3, 3));
+        NoiseRemoval.MedianFilter(_data, new Rectangle(0, 0, 5, 5));
     }
     
+    [Test]
+    public void HarmonicMeanTest7X7()
+    {
+        NoiseRemoval.HarmonicFilter(_data, new Rectangle(0, 0, 7, 7));
+    }
+    
+    [Test]
+    public void MedianTest7X7()
+    {
+        NoiseRemoval.MedianFilter(_data, new Rectangle(0, 0, 7, 7));
+    }
+
     [TearDown]
     public void TearDown()
     {
@@ -93,5 +108,8 @@ public class NoiseRemovalTests
         Console.WriteLine("{0,-25} | {1,-12} | {2,-12} | {3,-12}\n", "Original - Result", resultMd.X, resultMd.Y, resultMd.Z);
         
         _bitmap.UnlockBits(_data);
+        _current++;
+        Console.WriteLine($"Saving current operation under: {SavePath}\\{_current}.bmp\n");
+        ImageIO.SaveImage(_bitmap, $"{SavePath}\\{_current}.bmp");
     }
 }
