@@ -60,4 +60,7 @@ public class Options
     
     [Option("md")]
     public bool MaxDifference { get; set; }
+    
+    [Option("histogram")]
+    public bool Histogram { get; set; }
 }

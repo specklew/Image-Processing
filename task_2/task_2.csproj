@@ -4,6 +4,15 @@
         <TargetFramework>net6.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="System.Drawing.Common" Version="7.0.0-rc.2.22472.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\image_processing_core\image_processing_core.csproj" />
+    </ItemGroup>
 
 </Project>

@@ -1,9 +1,11 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Numerics;
 using CommandLine;
 using task_1;
+using task_2;
 
 namespace image_processing;
 
@@ -21,14 +23,15 @@ public static class Program
             Geometric(t, data, ref bitmap);
             Noise(t, data);
             Analysis(t, data);
-            
+            HistogramCalculation(t, data);
+
             bitmap.UnlockBits(data);
             
             // ReSharper disable once StringLiteralTypo
             ImageIO.SaveImage(bitmap, $"{t.FilePath}\\result.bmp");  
         });
     }
-
+    
     private static void Elementary(Options t, BitmapData data)
     {
         if (t.Brightness != 0) ElementaryOperations.ModifyBrightness(data, t.Brightness);
@@ -107,4 +110,14 @@ public static class Program
         noise.UnlockBits(noiseData);
         original.UnlockBits(originalData);
     }
+    
+    private static void HistogramCalculation(Options t, BitmapData data)
+    {
+        if (t.Histogram)
+        {
+            var histogram = new ImageHistogram(data);
+            ImageIO.SaveImage(histogram.GetHistogram(), $"{t.FilePath}\\histogram.bmp");
+        }
+    }
+
 }
