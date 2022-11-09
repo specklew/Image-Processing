@@ -6,9 +6,9 @@ namespace task_2;
 
 public class ImageHistogram
 {
-    private int[] redBucket = new int[256];
-    private int[] greenBucket = new int[256];
-    private int[] blueBucket = new int[256];
+    private readonly int[] _redBucket = new int[256];
+    private readonly int[] _greenBucket = new int[256];
+    private readonly int[] _blueBucket = new int[256];
 
     public ImageHistogram(BitmapData data)
     {
@@ -29,9 +29,9 @@ public class ImageHistogram
                 byte* pixel = row + x * bpp;
 
                 var rgb = RGB.ToRGB(pixel);
-                redBucket[rgb.R]++;
-                greenBucket[rgb.G]++;
-                blueBucket[rgb.B]++;
+                _redBucket[rgb.R]++;
+                _greenBucket[rgb.G]++;
+                _blueBucket[rgb.B]++;
             }
         }
     }
@@ -39,25 +39,25 @@ public class ImageHistogram
     public Bitmap GetHistogram()
     {
         var bucketsAndPens = new List<Tuple<IReadOnlyList<int>, Pen>>();
-        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(redBucket, Pens.Red));
-        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(greenBucket, Pens.Green));
-        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(blueBucket, Pens.Blue));
+        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(_redBucket, Pens.Red));
+        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(_greenBucket, Pens.Green));
+        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(_blueBucket, Pens.Blue));
         return DrawHistogramFromBucket(bucketsAndPens);
     }
     
     public Bitmap GetRedHistogram()
     {
-        return DrawHistogramFromBucket(redBucket);
+        return DrawHistogramFromBucket(_redBucket);
     }
     
     public Bitmap GetGreenHistogram()
     {
-        return DrawHistogramFromBucket(greenBucket);
+        return DrawHistogramFromBucket(_greenBucket);
     }
     
     public Bitmap GetBlueHistogram()
     {
-        return DrawHistogramFromBucket(blueBucket);
+        return DrawHistogramFromBucket(_blueBucket);
     }
 
     private static Bitmap DrawHistogramFromBucket(IReadOnlyList<int> bucket)

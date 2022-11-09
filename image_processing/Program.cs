@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Diagnostics.Metrics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Numerics;
