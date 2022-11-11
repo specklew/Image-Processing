@@ -38,10 +38,13 @@ public class ImageHistogram
     
     public Bitmap GetHistogram()
     {
-        var bucketsAndPens = new List<Tuple<IReadOnlyList<int>, Pen>>();
-        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(_redBucket, Pens.Red));
-        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(_greenBucket, Pens.Green));
-        bucketsAndPens.Add(new Tuple<IReadOnlyList<int>, Pen>(_blueBucket, Pens.Blue));
+        var bucketsAndPens = new List<Tuple<IReadOnlyList<int>, Pen>>
+        {
+            new(_redBucket, Pens.Red),
+            new(_greenBucket, Pens.Green),
+            new(_blueBucket, Pens.Blue)
+        };
+        
         return DrawHistogramFromBucket(bucketsAndPens);
     }
     
@@ -91,15 +94,15 @@ public class ImageHistogram
         int scale = bitmap.Width / 256;
         
         Graphics graphics = Graphics.FromImage(bitmap);
-        Point[] points = new Point[256];
+        var points = new Point[256];
         
-        for (int i = 0; i < 256; i++)
+        for (var i = 0; i < 256; i++)
         {
-            Point p = new Point(i * scale, bitmap.Height - bucket[i]);
+            var p = new Point(i * scale, bitmap.Height - bucket[i]);
             points[i] = p;
         }
         
-        for (int x = 0; x < bitmap.Width - 1; x++)
+        for (var x = 0; x < bitmap.Width - 1; x++)
         {
             graphics.DrawLines(pen, points);
         }
