@@ -3,11 +3,11 @@ using System.Numerics;
 
 namespace image_processing_core;
 
-public readonly struct RGB
+public struct RGB
 {
-    public short R { get; }
-    public short G {get; }
-    public short B {get; }
+    public short R { get; private set; }
+    public short G {get; private set; }
+    public short B {get; private set; }
 
     public RGB(long r, long g, long b)
     {
@@ -88,22 +88,22 @@ public readonly struct RGB
 
     public static RGB operator *(RGB rgb, RGB64 right)
     {
-        return new RGB(rgb.R * right.R, rgb.G * right.G, rgb.B * right.B);
+        return new RGB((int)(rgb.R * right.R), (int)(rgb.G * right.G), (int)(rgb.B * right.B));
     }
 
     public static RGB operator +(RGB left, RGB64 right)
     {
-        return new RGB(left.R + right.R, left.G + right.G, left.B + right.B);
+        return new RGB((int)(left.R + right.R), (int)(left.G + right.G), (int)(left.B + right.B));
     }
     
     public static RGB operator /(RGB left, RGB64 right)
     {
-        return new RGB(left.R / right.R, left.G / right.G, left.B / right.B);
+        return new RGB((int)(left.R / right.R), (int)(left.G / right.G), (int)(left.B / right.B));
     }
     
     public static RGB operator -(RGB left, RGB64 right)
     {
-        return new RGB(left.R - right.R, left.G - right.G, left.B - right.B);
+        return new RGB((int)(left.R - right.R), (int)(left.G - right.G), (int)(left.B - right.B));
     }
     
     public static bool operator >(RGB left, RGB64 right)
@@ -184,6 +184,14 @@ public readonly struct RGB
     public static unsafe RGB ToRGB(byte* pixel)
     {
         return new RGB(pixel[2], pixel[1], pixel[0]);
+    }
+
+    public RGB SetOneWhenZero()
+    {
+        if (R == 0) R = 1;
+        if (G == 0) G = 1;
+        if (B == 0) B = 1;
+        return this;
     }
 
     public override string ToString()

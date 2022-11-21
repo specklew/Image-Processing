@@ -36,6 +36,8 @@ public class ImageHistogram
         }
     }
     
+    //private IReadOnlyList<int> GetBucket()
+
     public Bitmap GetHistogram()
     {
         var bucketsAndPens = new List<Tuple<IReadOnlyList<int>, Pen>>

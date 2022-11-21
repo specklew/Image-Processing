@@ -55,7 +55,7 @@ public static class NoiseRemoval
         {
             for (var x = 0; x < data.Width; x++)
             {
-                RGB64 sum = RGB64.Zero();
+                RGB64 sum = new RGB64(0,0,0);
                 ushort i = 0;
                 for (int ry = y - offsetY; ry < rect.Height + y - offsetY; ry++)
                 {
@@ -137,6 +137,41 @@ public static class NoiseRemoval
                 }
                 
                 MathHelper.MedianRGB(rgbs.ToArray()).SaveToPixel(pixel);
+            }
+        }
+    }
+
+    public static unsafe void GeometricMeanFilter(BitmapData data, Rectangle rect)
+    {
+        int offsetX = rect.Width / 2;
+        int offsetY = rect.Height / 2;
+        
+        var pt = (byte*)data.Scan0;
+        int bpp = data.Stride / data.Width;
+
+        for (var y = 0; y < data.Height; y++)
+        {
+            for (var x = 0; x < data.Width; x++)
+            {
+                var result = new RGB64(1, 1, 1);
+                ushort i = 0;
+                for (int ry = y - offsetY; ry < rect.Height + y - offsetY; ry++)
+                {
+                    if(ry < 0 || ry >= data.Height) continue;
+                    byte* row = pt + ry * data.Stride;
+                    
+                    for (int rx = x - offsetX; rx < rect.Width + x - offsetX; rx++)
+                    {
+                        if(rx < 0 || rx >= data.Width) continue;
+                        byte* pixel = row + rx * bpp;
+                        var color = RGB.ToRGB(pixel);
+                        result *= color.SetOneWhenZero();
+                        i++;
+                    }
+                }
+
+                result = result.Pow(1.0 / i);
+                result.SaveToPixel(pt + y * data.Stride + x * bpp);
             }
         }
     }

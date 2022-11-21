@@ -1,27 +1,26 @@
 ﻿using System.Drawing.Imaging;
-using System.Numerics;
 using image_processing_core;
 
 namespace task_1;
 
 public static class AnalysisOperations
 {
-    public static unsafe Vector3 MeanSquareError(BitmapData data1, BitmapData data2)
+    public static unsafe RGB64 MeanSquareError(BitmapData inputData, BitmapData outputData)
     {
-        var pt1 = (byte*)data1.Scan0;
-        var pt2 = (byte*)data2.Scan0;
+        var pt1 = (byte*)inputData.Scan0;
+        var pt2 = (byte*)outputData.Scan0;
         
-        int bpp1 = data1.Stride / data1.Width;
-        int bpp2 = data2.Stride / data2.Width;
+        int bpp1 = inputData.Stride / inputData.Width;
+        int bpp2 = outputData.Stride / outputData.Width;
 
-        RGB64 sum = RGB64.Zero();
+        RGB64 sum = new RGB64(0, 0, 0);
         
-        for (var y = 0; y < data1.Height; y++)
+        for (var y = 0; y < inputData.Height; y++)
         {
-            byte* row1 = pt1 + y * data1.Stride;
-            byte* row2 = pt2 + y * data2.Stride;
+            byte* row1 = pt1 + y * inputData.Stride;
+            byte* row2 = pt2 + y * outputData.Stride;
 
-            for (var x = 0; x < data1.Width; x++)
+            for (var x = 0; x < inputData.Width; x++)
             {
                 byte* pixel1 = row1 + x * bpp1;
                 byte* pixel2 = row2 + x * bpp2;
@@ -35,27 +34,27 @@ public static class AnalysisOperations
             }
         }
 
-        Vector3 result = sum.ToVector3() / (data1.Width * data1.Height);
+        RGB64 result = sum / (inputData.Width * inputData.Height);
         return result;
     }
     
-    public static unsafe Vector3 PeakMeanSquareError(BitmapData data1, BitmapData data2)
+    public static unsafe RGB64 PeakMeanSquareError(BitmapData inputData, BitmapData outputData)
     {
-        var pt1 = (byte*)data1.Scan0;
-        var pt2 = (byte*)data2.Scan0;
+        var pt1 = (byte*)inputData.Scan0;
+        var pt2 = (byte*)outputData.Scan0;
         
-        int bpp1 = data1.Stride / data1.Width;
-        int bpp2 = data2.Stride / data2.Width;
+        int bpp1 = inputData.Stride / inputData.Width;
+        int bpp2 = outputData.Stride / outputData.Width;
 
-        RGB64 sum = RGB64.Zero();
+        RGB64 sum = new RGB64(0, 0, 0);
         RGB max = RGB.Zero();
         
-        for (var y = 0; y < data1.Height; y++)
+        for (var y = 0; y < inputData.Height; y++)
         {
-            byte* row1 = pt1 + y * data1.Stride;
-            byte* row2 = pt2 + y * data2.Stride;
+            byte* row1 = pt1 + y * inputData.Stride;
+            byte* row2 = pt2 + y * outputData.Stride;
 
-            for (var x = 0; x < data1.Width; x++)
+            for (var x = 0; x < inputData.Width; x++)
             {
                 byte* pixel1 = row1 + x * bpp1;
                 byte* pixel2 = row2 + x * bpp2;
@@ -70,30 +69,31 @@ public static class AnalysisOperations
                 sum += rgb1;
             }
         }
-
-        Vector3 result = sum.ToVector3() / (data1.Width * data1.Height);
-        result /= max.ToVector3();
         
+        max *= max;
+        RGB64 result = sum / (inputData.Width * inputData.Height);
+        result /= max;
+
         return result;
     }
     
-    public static unsafe Vector3 SignalNoiseRatio(BitmapData data1, BitmapData data2)
+    public static unsafe RGB64 SignalNoiseRatio(BitmapData inputData, BitmapData outputData)
     {
-        var pt1 = (byte*)data1.Scan0;
-        var pt2 = (byte*)data2.Scan0;
+        var pt1 = (byte*)inputData.Scan0;
+        var pt2 = (byte*)outputData.Scan0;
         
-        int bpp1 = data1.Stride / data1.Width;
-        int bpp2 = data2.Stride / data2.Width;
+        int bpp1 = inputData.Stride / inputData.Width;
+        int bpp2 = outputData.Stride / outputData.Width;
 
-        RGB64 initialSum = RGB64.Zero();
-        RGB64 sum = RGB64.Zero();
+        RGB64 initialSum = new RGB64(0, 0, 0);
+        RGB64 sum = new RGB64(0, 0, 0);
         
-        for (var y = 0; y < data1.Height; y++)
+        for (var y = 0; y < inputData.Height; y++)
         {
-            byte* row1 = pt1 + y * data1.Stride;
-            byte* row2 = pt2 + y * data2.Stride;
+            byte* row1 = pt1 + y * inputData.Stride;
+            byte* row2 = pt2 + y * outputData.Stride;
 
-            for (var x = 0; x < data1.Width; x++)
+            for (var x = 0; x < inputData.Width; x++)
             {
                 byte* pixel1 = row1 + x * bpp1;
                 byte* pixel2 = row2 + x * bpp2;
@@ -109,28 +109,28 @@ public static class AnalysisOperations
             }
         }
 
-        Vector3 result = initialSum.ToVector3() / sum.ToVector3();
+        RGB64 result = initialSum / sum;
         result = Log10(result);
         return result;
     }
     
-    public static unsafe Vector3 PeakSignalNoiseRatio(BitmapData data1, BitmapData data2)
+    public static unsafe RGB64 PeakSignalNoiseRatio(BitmapData inputData, BitmapData outputData)
     {
-        var pt1 = (byte*)data1.Scan0;
-        var pt2 = (byte*)data2.Scan0;
+        var pt1 = (byte*)inputData.Scan0;
+        var pt2 = (byte*)outputData.Scan0;
         
-        int bpp1 = data1.Stride / data1.Width;
-        int bpp2 = data2.Stride / data2.Width;
+        int bpp1 = inputData.Stride / inputData.Width;
+        int bpp2 = outputData.Stride / outputData.Width;
 
-        RGB64 max = RGB64.Zero();
-        RGB64 sum = RGB64.Zero();
+        RGB64 max = new RGB64(0, 0, 0);
+        RGB64 sum = new RGB64(0, 0, 0);
         
-        for (var y = 0; y < data1.Height; y++)
+        for (var y = 0; y < inputData.Height; y++)
         {
-            byte* row1 = pt1 + y * data1.Stride;
-            byte* row2 = pt2 + y * data2.Stride;
+            byte* row1 = pt1 + y * inputData.Stride;
+            byte* row2 = pt2 + y * outputData.Stride;
 
-            for (var x = 0; x < data1.Width; x++)
+            for (var x = 0; x < inputData.Width; x++)
             {
                 byte* pixel1 = row1 + x * bpp1;
                 byte* pixel2 = row2 + x * bpp2;
@@ -146,28 +146,29 @@ public static class AnalysisOperations
             }
         }
 
-        max *= data1.Width * data1.Height;
-        Vector3 result = max.ToVector3() / sum.ToVector3();
+        max *= max;
+        max *= inputData.Width * inputData.Height;
+        RGB64 result = max / sum;
         result = Log10(result);
         return result;
     }
     
-    public static unsafe Vector3 MaxDifference(BitmapData data1, BitmapData data2)
+    public static unsafe RGB64 MaxDifference(BitmapData inputData, BitmapData outputData)
     {
-        var pt1 = (byte*)data1.Scan0;
-        var pt2 = (byte*)data2.Scan0;
+        var pt1 = (byte*)inputData.Scan0;
+        var pt2 = (byte*)outputData.Scan0;
         
-        int bpp1 = data1.Stride / data1.Width;
-        int bpp2 = data2.Stride / data2.Width;
+        int bpp1 = inputData.Stride / inputData.Width;
+        int bpp2 = outputData.Stride / outputData.Width;
 
         RGB max = RGB.Zero();
 
-        for (var y = 0; y < data1.Height; y++)
+        for (var y = 0; y < inputData.Height; y++)
         {
-            byte* row1 = pt1 + y * data1.Stride;
-            byte* row2 = pt2 + y * data2.Stride;
+            byte* row1 = pt1 + y * inputData.Stride;
+            byte* row2 = pt2 + y * outputData.Stride;
 
-            for (var x = 0; x < data1.Width; x++)
+            for (var x = 0; x < inputData.Width; x++)
             {
                 byte* pixel1 = row1 + x * bpp1;
                 byte* pixel2 = row2 + x * bpp2;
@@ -182,13 +183,14 @@ public static class AnalysisOperations
             }
         }
 
-        var result = max.ToVector3();
+        RGB64 result = new RGB64();
+        result += max;
         return result;
     }
 
-    private static Vector3 Log10(Vector3 vector)
+    private static RGB64 Log10(RGB64 rgb)
     {
-        var result = new Vector3((float)Math.Log10(vector.X), (float)Math.Log10(vector.X), (float)Math.Log10(vector.X));
+        var result = new RGB64(Math.Log10(rgb.R), Math.Log10(rgb.G), Math.Log10(rgb.B));
         return result * 10;
     }
 }

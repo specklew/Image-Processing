@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Numerics;
 using CommandLine;
+using image_processing_core;
 using task_1;
 using task_2;
 
@@ -68,42 +68,42 @@ public static class Program
         
         if (t.MeanSquareError)
         {
-            Vector3 error = AnalysisOperations.MeanSquareError(originalData, data);
-            Console.WriteLine("MSE Original - Result: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            RGB64 error = AnalysisOperations.MeanSquareError(originalData, data);
+            Console.WriteLine("MSE Original - Result: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
             error = AnalysisOperations.MeanSquareError(originalData, noiseData);
-            Console.WriteLine("MSE Original - Noise: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            Console.WriteLine("MSE Original - Noise: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
         }
         
         if (t.PeakMeanSquareError)
         {
-            Vector3 error = AnalysisOperations.PeakMeanSquareError(data, originalData);
-            Console.WriteLine("PMSE Original - Result: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            RGB64 error = AnalysisOperations.PeakMeanSquareError(data, originalData);
+            Console.WriteLine("PMSE Original - Result: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
             error = AnalysisOperations.PeakMeanSquareError(originalData, noiseData);
-            Console.WriteLine("PMSE Original - Noise: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            Console.WriteLine("PMSE Original - Noise: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
         }
         
         if (t.SignalNoiseRatio)
         {
-            Vector3 error = AnalysisOperations.SignalNoiseRatio(data, originalData);
-            Console.WriteLine("SNR Original - Result: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            RGB64 error = AnalysisOperations.SignalNoiseRatio(data, originalData);
+            Console.WriteLine("SNR Original - Result: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
             error = AnalysisOperations.SignalNoiseRatio(originalData, noiseData);
-            Console.WriteLine("SNR Original - Noise: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            Console.WriteLine("SNR Original - Noise: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
         }
         
         if (t.PeakSignalNoiseRatio)
         {
-            Vector3 error = AnalysisOperations.PeakSignalNoiseRatio(data, originalData);
-            Console.WriteLine("PSNR Original - Result: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            RGB64 error = AnalysisOperations.PeakSignalNoiseRatio(data, originalData);
+            Console.WriteLine("PSNR Original - Result: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
             error = AnalysisOperations.PeakSignalNoiseRatio(originalData, noiseData);
-            Console.WriteLine("PSNR Original - Noise: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            Console.WriteLine("PSNR Original - Noise: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
         }
         
         if (t.MaxDifference)
         {
-            Vector3 error = AnalysisOperations.MaxDifference(data, originalData);
-            Console.WriteLine("Max difference Original - Result: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            RGB64 error = AnalysisOperations.MaxDifference(data, originalData);
+            Console.WriteLine("Max difference Original - Result: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
             error = AnalysisOperations.MaxDifference(originalData, noiseData);
-            Console.WriteLine("Max difference Original - Noise: R = " + error.X + ", G = " + error.Y + ", B = " + error.Z);
+            Console.WriteLine("Max difference Original - Noise: R = " + error.R + ", G = " + error.G + ", B = " + error.B);
         }
         
         noise.UnlockBits(noiseData);

@@ -1,0 +1,13 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=5b71091b_002D47da_002D4e5f_002D901b_002D85fa5dad11e6/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;And&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::414CD39A-BA34-405F-819E-33805476FAF5::net6.0::task_1_tests.NoiseRemovalTests&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="C:\Users\macie\RiderProjects\image_processing\task_1_tests" Presentation="&amp;lt;Task1&amp;gt;\&amp;lt;task_1_tests&amp;gt;" /&gt;&#xD;
+    &lt;Namespace&gt;task_1_tests&lt;/Namespace&gt;&#xD;
+  &lt;/And&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=f6d546aa_002Da8f9_002D4ca6_002D9e1f_002D09c07d15c32d/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="HistogramTests" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;Project Location="C:\Users\macie\RiderProjects\image_processing\task_1_tests" Presentation="&amp;lt;Task1&amp;gt;\&amp;lt;task_1_tests&amp;gt;" /&gt;&#xD;
+&lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>

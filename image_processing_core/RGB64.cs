@@ -5,22 +5,17 @@ namespace image_processing_core;
 
 public readonly struct RGB64
 {
-    public long R { get; }
-    public long G {get; }
-    public long B {get; }
+    public double R { get; }
+    public double G {get; }
+    public double B {get; }
 
-    public RGB64(long r, long g, long b)
+    public RGB64(double r, double g, double b)
     {
         R = r;
         G = g;
         B = b;
     }
-
-    public static RGB64 Zero()
-    {
-        return new RGB64(0, 0, 0);
-    }
-
+    
     #region RGB64 Operators
 
     public static RGB64 operator *(RGB64 rgb, int scalar)
@@ -112,14 +107,14 @@ public readonly struct RGB64
 
     public double Length()
     {
-        return Math.Sqrt(R ^ 2 + G ^ 2 + B ^ 2);
+        return Math.Sqrt(R * R + G * G + B * B);
     }
     
     public RGB64 ChangeContrast(int factor)
     {
-        var r = (int)Math.Truncate((double)(factor * (R - 128) + 128));
-        var g = (int)Math.Truncate((double)(factor * (G - 128) + 128));
-        var b = (int)Math.Truncate((double)(factor * (B - 128) + 128));
+        double r = Math.Truncate(factor * (R - 128) + 128);
+        double g = Math.Truncate(factor * (G - 128) + 128);
+        double b = Math.Truncate(factor * (B - 128) + 128);
         return new RGB64(r, g, b);
     }
     
@@ -136,20 +131,23 @@ public readonly struct RGB64
         
         return Color.FromArgb(255, r, g, b);
     }
-
-    public Vector3 ToVector3()
-    {
-        return new Vector3(R, G, B);
-    }
-
+    
     public static RGB64 ToRGB(Vector3 vector3)
     {
-        return new RGB64((int)vector3.X, (int)vector3.Y, (int)vector3.Z);
+        return new RGB64(vector3.X, vector3.Y, vector3.Z);
     }
 
     public static RGB64 ToRGB(Color color)
     {
         return new RGB64(color.R, color.G, color.B);
+    }
+    
+    public RGB64 Pow(double i)
+    {
+        var r = Math.Pow(R, i);
+        var g = Math.Pow(G, i);
+        var b = Math.Pow(B, i);
+        return new RGB64(r, g, b);
     }
 
     public unsafe void SaveToPixel(byte* pixel)
@@ -168,6 +166,11 @@ public readonly struct RGB64
         return new RGB64(pixel[2], pixel[1], pixel[0]);
     }
 
+    public double Mean()
+    {
+        return (R + G + B) / 3.0;
+    }
+    
     public override string ToString()
     {
         return base.ToString() + " R = " + R + ", G = " + G + ", B = " + B;
