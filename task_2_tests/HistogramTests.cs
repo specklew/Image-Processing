@@ -18,7 +18,7 @@ public class HistogramTests
     [SetUp]
     public void Setup()
     {
-        _bitmap = ImageIO.LoadImage($"{TestPath}\\noise.bmp");
+        _bitmap = ImageIO.LoadImage($"{TestPath}\\original.bmp");
         _data = ImageIO.LockPixels(_bitmap);
     }
 

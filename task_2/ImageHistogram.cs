@@ -6,6 +6,18 @@ namespace task_2;
 
 public class ImageHistogram
 {
+    public int[] RedBucket => _redBucket;
+    public int[] GreenBucket => _greenBucket;
+    public int[] BlueBucket => _blueBucket;
+
+    public Dictionary<Channel, int[]> Buckets =>
+        new()
+        { 
+            { Channel.Red, _redBucket }, 
+            { Channel.Green , _greenBucket},
+            { Channel.Blue , _blueBucket}
+        };
+
     private readonly int[] _redBucket = new int[256];
     private readonly int[] _greenBucket = new int[256];
     private readonly int[] _blueBucket = new int[256];
@@ -35,8 +47,6 @@ public class ImageHistogram
             }
         }
     }
-    
-    //private IReadOnlyList<int> GetBucket()
 
     public Bitmap GetHistogram()
     {

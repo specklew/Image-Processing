@@ -23,6 +23,16 @@ public readonly struct RGB64
         return new RGB64(rgb.R * scalar, rgb.G * scalar, rgb.B * scalar);
     }
     
+    public static RGB64 operator *(RGB64 rgb, float scalar)
+    {
+        return new RGB64(rgb.R * scalar, rgb.G * scalar, rgb.B * scalar);
+    }
+    
+    public static RGB64 operator *(RGB64 rgb, double scalar)
+    {
+        return new RGB64(rgb.R * scalar, rgb.G * scalar, rgb.B * scalar);
+    }
+    
     public static RGB64 operator *(RGB64 rgb, RGB64 right)
     {
         return new RGB64(rgb.R * right.R, rgb.G * right.G, rgb.B * right.B);

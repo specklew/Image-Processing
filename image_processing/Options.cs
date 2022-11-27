@@ -1,5 +1,7 @@
 ﻿using System.Drawing;
 using CommandLine;
+using image_processing_core;
+
 // ReSharper disable All
 #pragma warning disable CS8618
 
@@ -10,6 +12,9 @@ public class Options
     [Value(0)]
     public string FilePath { get; set; }
 
+    [Option("benchmark")]
+    public bool Benchmark { get; set; }
+    
     [Option("brightness")]
     public byte Brightness { get; set; }
 
@@ -63,4 +68,37 @@ public class Options
     
     [Option("histogram")]
     public bool Histogram { get; set; }
+    
+    [Option("huniform")]
+    public Point HUniform { get; set; }
+    
+    [Option("cmean")]
+    public bool Mean { get; set; }
+    
+    [Option("cvariance")]
+    public bool Variance { get; set; }
+    
+    [Option("cstdev")]
+    public bool StandardDeviation { get; set; }
+    
+    [Option("cvarcoi")]
+    public bool VariationCoefficientI { get; set; }
+    
+    [Option("casyco")]
+    public bool AsymmetryCoefficient { get; set; }
+    
+    [Option("cflaco")]
+    public bool FlatteningCoefficient { get; set; }
+    
+    [Option("cvarcoii")]
+    public bool VariationCoefficientII { get; set; }
+    
+    [Option("centropy")]
+    public bool InformationSourceEntropy { get; set; }
+    
+    [Option("slaplace")]
+    public int? ExtractionOfDetails { get; set; }
+    
+    [Option("solaplace")]
+    public bool OptimizedExtractionOfDetails { get; set; }
 }

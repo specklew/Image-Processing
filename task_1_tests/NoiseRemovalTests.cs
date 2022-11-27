@@ -13,7 +13,7 @@ public class NoiseRemovalTests
 {
     private const string TestPath = "C:\\Studia\\2022_Winter\\Image Processing\\Labs\\lenna";
     private const string SavePath = "C:\\Studia\\2022_Winter\\Image Processing\\Labs\\tests\\noise_removal";
-    private const string NoiseName = "lenac_impulse3.bmp";
+    private const string NoiseName = "lena_impulse1.bmp";
     
     private Bitmap _bitmap = null!;
     private Bitmap _noise = null!;
@@ -39,7 +39,65 @@ public class NoiseRemovalTests
         
         _stopWatch = Stopwatch.StartNew();   
     }
-
+    
+    [Test]
+    public void MidpointFilterTest3X3()
+    {
+        NoiseRemoval.MidpointFilter(_data, new Rectangle(0, 0, 3, 3));
+    }
+    
+    [Test]
+    public void MinText3X3()
+    {
+        _bitmap.UnlockBits(_data);
+        _bitmap = NoiseRemoval.MinimumFilter(_bitmap, new Rectangle(0, 0, 3, 3));
+        _data = ImageIO.LockPixels(_bitmap);
+    }
+    
+    [Test]
+    public void MinText5X5()
+    {
+        _bitmap.UnlockBits(_data);
+        _bitmap = NoiseRemoval.MinimumFilter(_bitmap, new Rectangle(0, 0, 5, 5));
+        _data = ImageIO.LockPixels(_bitmap);
+    }
+    
+    
+    [Test]
+    public void MaxText3X3()
+    {
+        _bitmap.UnlockBits(_data);
+        _bitmap = NoiseRemoval.MaximumFilter(_bitmap, new Rectangle(0, 0, 3, 3));
+        _data = ImageIO.LockPixels(_bitmap);
+    }
+    
+    [Test]
+    public void MaxText5X5()
+    {
+        _bitmap.UnlockBits(_data);
+        _bitmap = NoiseRemoval.MaximumFilter(_bitmap, new Rectangle(0, 0, 5, 5));
+        _data = ImageIO.LockPixels(_bitmap);
+    }
+    
+    
+    [Test]
+    public void GeometricMeanText3X3()
+    {
+        NoiseRemoval.GeometricMeanFilter(_data, new Rectangle(0, 0, 3, 3));
+    }
+    
+    [Test]
+    public void GeometricMeanText5X5()
+    {
+        NoiseRemoval.GeometricMeanFilter(_data, new Rectangle(0, 0, 5, 5));
+    }
+    
+    [Test]
+    public void GeometricMeanText7X7()
+    {
+        NoiseRemoval.GeometricMeanFilter(_data, new Rectangle(0, 0, 7, 7));
+    }
+    
     [Test]
     public void HarmonicMeanTest3X3()
     {

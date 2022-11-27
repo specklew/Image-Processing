@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
 using System.Numerics;
+using image_processing;
 using image_processing_core;
 
 namespace task_1;
@@ -174,5 +175,144 @@ public static class NoiseRemoval
                 result.SaveToPixel(pt + y * data.Stride + x * bpp);
             }
         }
+    }
+    
+    public static unsafe void MaxFilter(BitmapData data, Rectangle rect)
+    {
+        int offsetX = rect.Width / 2;
+        int offsetY = rect.Height / 2;
+        
+        var pt = (byte*)data.Scan0;
+        int bpp = data.Stride / data.Width;
+
+        for (var y = 0; y < data.Height; y++)
+        {
+            for (var x = 0; x < data.Width; x++)
+            {
+                var max = new RGB(0,   0,   0);
+                for (int ry = y - offsetY; ry < rect.Height + y - offsetY; ry++)
+                {
+                    if(ry < 0 || ry >= data.Height) continue;
+                    byte* row = pt + ry * data.Stride;
+                    for (int rx = x - offsetX; rx < rect.Width + x - offsetX; rx++)
+                    {
+                        if(rx < 0 || rx >= data.Width) continue;
+                        byte* pixel = row + rx * bpp;
+                        if(RGB.ToRGB(pixel) > max) max = RGB.ToRGB(pixel);
+                    }
+                }
+                
+                max.SaveToPixel(pt + y * data.Stride + x * bpp);
+            }
+        }
+    }
+    
+    public static unsafe void MinFilter(BitmapData data, Rectangle rect)
+    {
+        int offsetX = rect.Width / 2;
+        int offsetY = rect.Height / 2;
+        
+        var pt = (byte*)data.Scan0;
+        int bpp = data.Stride / data.Width;
+
+        for (var y = 0; y < data.Height; y++)
+        {
+            for (var x = 0; x < data.Width; x++)
+            {
+                var min = new RGB(255,   255,   255);
+                for (int ry = y - offsetY; ry < rect.Height + y - offsetY; ry++)
+                {
+                    if(ry < 0 || ry >= data.Height) continue;
+                    byte* row = pt + ry * data.Stride;
+                    for (int rx = x - offsetX; rx < rect.Width + x - offsetX; rx++)
+                    {
+                        if(rx < 0 || rx >= data.Width) continue;
+                        byte* pixel = row + rx * bpp;
+                        var p = RGB.ToRGB(pixel);
+                        if(p < min) min = p;
+                    }
+                }
+                
+                min.SaveToPixel(pt + y * data.Stride + x * bpp);
+            }
+        }
+    }
+
+    public static unsafe Bitmap MinimumFilter(Bitmap bitmap, Rectangle rect)
+    {
+        var newBitmap = new Bitmap(bitmap);
+        BitmapData data = ImageIO.LockPixels(bitmap);
+        BitmapData newData = ImageIO.LockPixels(newBitmap);
+        
+        int offsetX = rect.Width / 2;
+        int offsetY = rect.Height / 2;
+        
+        var pt = (byte*)data.Scan0;
+        int bpp = data.Stride / data.Width;
+
+        for (int y = 0; y < data.Height; y++)
+        {
+            for (int x = 0; x < data.Width; x++)
+            {
+                var min = new RGB(255, 255, 255);
+
+                for (int dy = -offsetY; dy <= offsetY; dy++)
+                {
+                    if(dy + y < 0 || dy + y >= data.Height) continue;
+                    byte* row = pt + (dy + y) * data.Stride;
+                    for (int dx = -offsetX; dx <= offsetX; dx++)
+                    {
+                        if(dx + x < 0 || dx + x >= data.Width) continue;
+                        byte* pixel = row + (x + dx) * bpp;
+                        var p = RGB.ToRGB(pixel);
+                        if (p < min) min = p;
+                    }
+                }
+                
+                min.SaveToPixel((byte*)newData.Scan0 + y * newData.Stride + x * newData.Stride / newData.Width);
+            }
+        }
+
+        newBitmap.UnlockBits(newData);
+        return newBitmap;
+    }
+    
+    public static unsafe Bitmap MaximumFilter(Bitmap bitmap, Rectangle rect)
+    {
+        var newBitmap = new Bitmap(bitmap);
+        BitmapData data = ImageIO.LockPixels(bitmap);
+        BitmapData newData = ImageIO.LockPixels(newBitmap);
+        
+        int offsetX = rect.Width / 2;
+        int offsetY = rect.Height / 2;
+        
+        var pt = (byte*)data.Scan0;
+        int bpp = data.Stride / data.Width;
+
+        for (int y = 0; y < data.Height; y++)
+        {
+            for (int x = 0; x < data.Width; x++)
+            {
+                var max = new RGB(0, 0, 0);
+
+                for (int dy = -offsetY; dy <= offsetY; dy++)
+                {
+                    if(dy + y < 0 || dy + y >= data.Height) continue;
+                    byte* row = pt + (dy + y) * data.Stride;
+                    for (int dx = -offsetX; dx <= offsetX; dx++)
+                    {
+                        if(dx + x < 0 || dx + x >= data.Width) continue;
+                        byte* pixel = row + (x + dx) * bpp;
+                        var p = RGB.ToRGB(pixel);
+                        if (p > max) max = p;
+                    }
+                }
+                
+                max.SaveToPixel((byte*)newData.Scan0 + y * newData.Stride + x * newData.Stride / newData.Width);
+            }
+        }
+
+        newBitmap.UnlockBits(newData);
+        return newBitmap;
     }
 }

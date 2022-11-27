@@ -9,13 +9,21 @@ public static class ImageIO
     {
         try
         {
-            return Bitmap.FromFile(name) as Bitmap;
+            return PaintOn24bpp(Bitmap.FromFile(name));
         }
         catch (InvalidOperationException exception)
         {
             Console.Write("The image your trying to read does not exist!\n" + exception.Message);
             return null;
         }
+    }
+    
+    public static Bitmap PaintOn24bpp(Image image)
+    {
+        Bitmap bp = new Bitmap(image.Width, image.Height, PixelFormat.Format24bppRgb);
+        using (Graphics gr = Graphics.FromImage(bp))
+            gr.DrawImage(image, new Rectangle(0, 0, bp.Width, bp.Height));
+        return bp;
     }
     
     public static BitmapData LockPixels(Bitmap bitmap)

@@ -161,7 +161,7 @@ public static class AnalysisOperations
         int bpp1 = inputData.Stride / inputData.Width;
         int bpp2 = outputData.Stride / outputData.Width;
 
-        RGB max = RGB.Zero();
+        RGB64 max =  new RGB64(0,0,0);
 
         for (var y = 0; y < inputData.Height; y++)
         {
@@ -173,8 +173,8 @@ public static class AnalysisOperations
                 byte* pixel1 = row1 + x * bpp1;
                 byte* pixel2 = row2 + x * bpp2;
 
-                var rgb1 = RGB.ToRGB(pixel1);
-                var rgb2 = RGB.ToRGB(pixel2);
+                var rgb1 = RGB64.ToRGB(pixel1);
+                var rgb2 = RGB64.ToRGB(pixel2);
                 
                 rgb1 -= rgb2;
                 rgb1 = rgb1.AbsoluteValue();
@@ -182,10 +182,8 @@ public static class AnalysisOperations
                 if (rgb1 > max) max = rgb1;
             }
         }
-
-        RGB64 result = new RGB64();
-        result += max;
-        return result;
+        
+        return max;
     }
 
     private static RGB64 Log10(RGB64 rgb)
