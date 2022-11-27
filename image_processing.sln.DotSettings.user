@@ -8,7 +8,7 @@
     &lt;Namespace&gt;task_1_tests&lt;/Namespace&gt;&#xD;
   &lt;/And&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=66e9a278_002D6387_002D4bef_002D9b82_002D0acdfe9e9ea8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Session #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=66e9a278_002D6387_002D4bef_002D9b82_002D0acdfe9e9ea8/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Session #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;Or&gt;&#xD;
     &lt;And&gt;&#xD;
       &lt;TestAncestor&gt;&#xD;
@@ -49,6 +49,7 @@
     &lt;/And&gt;&#xD;
     &lt;TestAncestor&gt;&#xD;
       &lt;TestId&gt;NUnit3x::4A27B71C-951E-4E8D-BCAB-870FB5F28F9A::net6.0::task_2_tests.HistogramAnalysisTests.CharacteristicsTest&lt;/TestId&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::4A27B71C-951E-4E8D-BCAB-870FB5F28F9A::net6.0::task_2_tests.HistogramTests.AnalyseEachBitmapInFolder&lt;/TestId&gt;&#xD;
     &lt;/TestAncestor&gt;&#xD;
   &lt;/Or&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
@@ -59,5 +60,57 @@
     &lt;TestId&gt;NUnit3x::414CD39A-BA34-405F-819E-33805476FAF5::net6.0::task_1_tests.NoiseRemovalTests.MaxText5X5&lt;/TestId&gt;&#xD;
     &lt;TestId&gt;NUnit3x::414CD39A-BA34-405F-819E-33805476FAF5::net6.0::task_1_tests.NoiseRemovalTests.MinText3X3&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=e323cc30_002D33c3_002D41fd_002D8576_002Dfde18226fc9b/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="AnalyseEachBitmapHistogram" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;And&gt;&#xD;
+    &lt;TestAncestor&gt;&#xD;
+      &lt;TestId&gt;NUnit3x::4A27B71C-951E-4E8D-BCAB-870FB5F28F9A::net6.0::task_2_tests.HistogramTests.AnalyseEachBitmapInFolder&lt;/TestId&gt;&#xD;
+    &lt;/TestAncestor&gt;&#xD;
+    &lt;Project Location="C:\Users\macie\RiderProjects\image_processing\task_2_tests" Presentation="&amp;lt;Task2&amp;gt;\&amp;lt;task_2_tests&amp;gt;" /&gt;&#xD;
+    &lt;Namespace&gt;task_2_tests&lt;/Namespace&gt;&#xD;
+    &lt;Or&gt;&#xD;
+      &lt;And&gt;&#xD;
+        &lt;TestAncestor&gt;&#xD;
+          &lt;TestId&gt;NUnit3x::414CD39A-BA34-405F-819E-33805476FAF5::net6.0::task_1_tests.NoiseRemovalTests&lt;/TestId&gt;&#xD;
+        &lt;/TestAncestor&gt;&#xD;
+        &lt;Project Location="C:\Users\macie\RiderProjects\image_processing\task_1_tests" Presentation="&amp;lt;Task1&amp;gt;\&amp;lt;task_1_tests&amp;gt;" /&gt;&#xD;
+        &lt;Namespace&gt;task_1_tests&lt;/Namespace&gt;&#xD;
+        &lt;Or&gt;&#xD;
+          &lt;And&gt;&#xD;
+            &lt;TestAncestor&gt;&#xD;
+              &lt;TestId&gt;NUnit3x::414CD39A-BA34-405F-819E-33805476FAF5::net6.0::task_1_tests.NoiseRemovalTests.MedianTest3X3&lt;/TestId&gt;&#xD;
+            &lt;/TestAncestor&gt;&#xD;
+            &lt;Project Location="C:\Users\macie\RiderProjects\image_processing\task_1_tests" Presentation="&amp;lt;Task1&amp;gt;\&amp;lt;task_1_tests&amp;gt;" /&gt;&#xD;
+            &lt;Namespace&gt;task_1_tests&lt;/Namespace&gt;&#xD;
+          &lt;/And&gt;&#xD;
+          &lt;And&gt;&#xD;
+            &lt;TestAncestor&gt;&#xD;
+              &lt;TestId&gt;NUnit3x::414CD39A-BA34-405F-819E-33805476FAF5::net6.0::task_1_tests.NoiseRemovalTests.MedianTest5X5&lt;/TestId&gt;&#xD;
+            &lt;/TestAncestor&gt;&#xD;
+            &lt;Project Location="C:\Users\macie\RiderProjects\image_processing\task_1_tests" Presentation="&amp;lt;Task1&amp;gt;\&amp;lt;task_1_tests&amp;gt;" /&gt;&#xD;
+            &lt;Namespace&gt;task_1_tests&lt;/Namespace&gt;&#xD;
+          &lt;/And&gt;&#xD;
+          &lt;And&gt;&#xD;
+            &lt;TestAncestor&gt;&#xD;
+              &lt;TestId&gt;NUnit3x::414CD39A-BA34-405F-819E-33805476FAF5::net6.0::task_1_tests.NoiseRemovalTests.MedianTest7X7&lt;/TestId&gt;&#xD;
+            &lt;/TestAncestor&gt;&#xD;
+            &lt;Project Location="C:\Users\macie\RiderProjects\image_processing\task_1_tests" Presentation="&amp;lt;Task1&amp;gt;\&amp;lt;task_1_tests&amp;gt;" /&gt;&#xD;
+            &lt;Namespace&gt;task_1_tests&lt;/Namespace&gt;&#xD;
+          &lt;/And&gt;&#xD;
+          &lt;And&gt;&#xD;
+            &lt;TestAncestor&gt;&#xD;
+              &lt;TestId&gt;NUnit3x::414CD39A-BA34-405F-819E-33805476FAF5::net6.0::task_1_tests.NoiseRemovalTests.MedianTest9X9&lt;/TestId&gt;&#xD;
+            &lt;/TestAncestor&gt;&#xD;
+            &lt;Project Location="C:\Users\macie\RiderProjects\image_processing\task_1_tests" Presentation="&amp;lt;Task1&amp;gt;\&amp;lt;task_1_tests&amp;gt;" /&gt;&#xD;
+            &lt;Namespace&gt;task_1_tests&lt;/Namespace&gt;&#xD;
+          &lt;/And&gt;&#xD;
+        &lt;/Or&gt;&#xD;
+      &lt;/And&gt;&#xD;
+      &lt;TestAncestor&gt;&#xD;
+        &lt;TestId&gt;NUnit3x::4A27B71C-951E-4E8D-BCAB-870FB5F28F9A::net6.0::task_2_tests.HistogramAnalysisTests.CharacteristicsTest&lt;/TestId&gt;&#xD;
+        &lt;TestId&gt;NUnit3x::4A27B71C-951E-4E8D-BCAB-870FB5F28F9A::net6.0::task_2_tests.HistogramTests.AnalyseEachBitmapInFolder&lt;/TestId&gt;&#xD;
+      &lt;/TestAncestor&gt;&#xD;
+    &lt;/Or&gt;&#xD;
+  &lt;/And&gt;&#xD;
 &lt;/SessionState&gt;</s:String>
 	</wpf:ResourceDictionary>

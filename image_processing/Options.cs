@@ -101,4 +101,7 @@ public class Options
     
     [Option("solaplace")]
     public bool OptimizedExtractionOfDetails { get; set; }
+    
+    [Option("orobertsi")]
+    public bool RobertsOperatorI { get; set; }
 }

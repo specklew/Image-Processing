@@ -7,6 +7,14 @@ public static class HistogramAnalysis
 {
     public static unsafe void UniformFinalDensityProbabilityFunction(BitmapData data, int minBrightness, int maxBrightness)
     {
+        minBrightness = Math.Clamp(minBrightness, 0, 255);
+        maxBrightness = Math.Clamp(maxBrightness, 0, 255);
+        
+        if (minBrightness > maxBrightness)
+        {
+            (minBrightness, maxBrightness) = (maxBrightness, minBrightness);
+        }
+        
         int Calculate(int f, IReadOnlyList<int> bucket)
         {
             var sum = 0;

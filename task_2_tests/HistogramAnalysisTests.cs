@@ -80,7 +80,7 @@ public class HistogramAnalysisTests
             HistogramAnalysis.InformationSourceEntropy(_data, Channel.Red), 
             HistogramAnalysis.InformationSourceEntropy(_data, Channel.Green), 
             HistogramAnalysis.InformationSourceEntropy(_data, Channel.Blue));
-        }
+    }
 
     [TearDown]
     public void TearDown()

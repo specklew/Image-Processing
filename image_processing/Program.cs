@@ -252,6 +252,11 @@ public static class Program
             bitmap = ConvolutionOperations.OptimizedEdgeDetection(bitmap);
         }
 
+        if (t.RobertsOperatorI)
+        {
+            bitmap = NonLinearOperations.RobertsOpeator(bitmap);
+        }
+
         ImageIO.LockPixels(bitmap);
     }
 }

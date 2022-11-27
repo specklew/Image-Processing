@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using image_processing_core;
 
@@ -50,11 +51,15 @@ public class ImageHistogram
 
     public Bitmap GetHistogram()
     {
-        var bucketsAndPens = new List<Tuple<IReadOnlyList<int>, Pen>>
+        Color red = Color.FromArgb(255, 255, 0, 0);
+        Color green = Color.FromArgb(128, 0, 255, 0);
+        Color blue = Color.FromArgb(85, 0, 0, 255);
+        
+        var bucketsAndPens = new List<Tuple<IReadOnlyList<int>, Brush>>
         {
-            new(_redBucket, Pens.Red),
-            new(_greenBucket, Pens.Green),
-            new(_blueBucket, Pens.Blue)
+            new(_redBucket, new SolidBrush(red)),
+            new(_greenBucket, new SolidBrush(green)),
+            new(_blueBucket, new SolidBrush(blue))
         };
         
         return DrawHistogramFromBucket(bucketsAndPens);
@@ -77,46 +82,49 @@ public class ImageHistogram
 
     private static Bitmap DrawHistogramFromBucket(IReadOnlyList<int> bucket)
     {
-        int scale = bucket.Max() / 256;
+        float scale = 1024f / bucket.Max();
         
-        Bitmap bitmap = new Bitmap(256 * scale, bucket.Max(), PixelFormat.Format24bppRgb);
+        Bitmap bitmap = new Bitmap(1024, 1024, PixelFormat.Format24bppRgb);
 
-        DrawHistogramGraphics(bitmap, bucket);
+        Graphics graphics = Graphics.FromImage(bitmap);
+        DrawHistogramGraphics(graphics, bucket, scale, Brushes.White);
         
         return bitmap;
     }
     
-    private static Bitmap DrawHistogramFromBucket(List<Tuple<IReadOnlyList<int>, Pen>> bucketsAndPens)
+    private static Bitmap DrawHistogramFromBucket(List<Tuple<IReadOnlyList<int>, Brush>> bucketsAndPens)
     {
         int max = bucketsAndPens.Select(tuple => tuple.Item1.Max()).Prepend(0).Max();
-        int scale = max / 256;
+        float scale = 1024f / max;
 
-        var bitmap = new Bitmap(256 * scale, max, PixelFormat.Format24bppRgb);
-        foreach ((IReadOnlyList<int>? bucket, Pen? pen) in bucketsAndPens)
+        var bitmap = new Bitmap(1024, 1024, PixelFormat.Format24bppRgb);
+        Graphics graphics = Graphics.FromImage(bitmap);
+        graphics.CompositingQuality = CompositingQuality.HighSpeed;
+        
+        foreach ((IReadOnlyList<int>? bucket, Brush? brush) in bucketsAndPens)
         {
-            DrawHistogramGraphics(bitmap, bucket, pen);
+            DrawHistogramGraphics(graphics, bucket, scale, brush);
         }
         
         return bitmap;
     }
 
-    private static void DrawHistogramGraphics(Bitmap bitmap, IReadOnlyList<int> bucket, Pen? pen = null)
+    private static void DrawHistogramGraphics(Graphics graphics, IReadOnlyList<int> bucket, float scale, Brush? brush = null)
     {
-        pen ??= Pens.White;
-        int scale = bitmap.Width / 256;
+        brush ??= new SolidBrush(Color.White);
         
-        Graphics graphics = Graphics.FromImage(bitmap);
-        var points = new Point[256];
-        
-        for (var i = 0; i < 256; i++)
+        var points = new Point[258];
+
+        for (var i = 1; i < 257; i++)
         {
-            var p = new Point(i * scale, bitmap.Height - bucket[i]);
+            var p = new Point(i * 4, 1024 - (int)(bucket[i - 1] * scale));
             points[i] = p;
         }
+
+        points[0] = new Point(0, 1024);
+        points[257] = new Point(1024, 1024);
         
-        for (var x = 0; x < bitmap.Width - 1; x++)
-        {
-            graphics.DrawLines(pen, points);
-        }
+
+        graphics.FillPolygon(brush, points);
     }
 }
