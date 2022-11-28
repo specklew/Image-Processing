@@ -35,7 +35,7 @@ public static class Program
             bitmap.UnlockBits(data);
 
             // ReSharper disable once StringLiteralTypo
-            ImageIO.SaveImage(bitmap, $"{t.FilePath}\\result.bmp");  
+            ImageIO.SaveImage(bitmap, $"{t.FilePath}\\{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.bmp");  
         });
     }
 

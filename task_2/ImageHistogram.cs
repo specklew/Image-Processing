@@ -1,6 +1,7 @@
 ﻿using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using image_processing;
 using image_processing_core;
 
 namespace task_2;
@@ -88,6 +89,8 @@ public class ImageHistogram
 
         Graphics graphics = Graphics.FromImage(bitmap);
         DrawHistogramGraphics(graphics, bucket, scale, Brushes.White);
+
+        ImageIO.LockPixels(bitmap);
         
         return bitmap;
     }
@@ -105,7 +108,7 @@ public class ImageHistogram
         {
             DrawHistogramGraphics(graphics, bucket, scale, brush);
         }
-        
+
         return bitmap;
     }
 
