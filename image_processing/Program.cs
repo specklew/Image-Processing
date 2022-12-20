@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Imaging;
 using BenchmarkDotNet.Running;
@@ -26,6 +27,8 @@ public static class Program
             Bitmap bitmap = ImageIO.LoadImage($"{t.FilePath}\\noise.bmp");
             BitmapData data = ImageIO.LockPixels(bitmap);
             
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            
             Elementary(t, data);
             Geometric(t, data, ref bitmap);
             Noise(t, data);
@@ -34,6 +37,9 @@ public static class Program
             Convolution(t, data, ref bitmap);
             BasicMorphological(t, data, ref bitmap);
 
+            stopwatch.Stop();
+            Console.WriteLine($"The operations given took:\n{stopwatch.Elapsed:mm} minutes {stopwatch.Elapsed:ss} seconds {stopwatch.Elapsed:ff} milliseconds");
+            
             bitmap.UnlockBits(data);
 
             // ReSharper disable once StringLiteralTypo
@@ -300,6 +306,12 @@ public static class Program
         if (Kernels.Contains(t.HitOrMiss))
         {
             bitmap = BasicMorphologicalOperations.HitOrMiss(bitmap, Kernels.GetKernel(t.HitOrMiss));
+        }
+
+        List<int> growRegion = new(t.GrowRegion);
+        if (growRegion.Count != 0)
+        {
+            bitmap = ImageSegmentation.GrowRegion(bitmap, growRegion[0], growRegion[1], growRegion[2]);
         }
 
         List<string> m3 = new(t.M3);

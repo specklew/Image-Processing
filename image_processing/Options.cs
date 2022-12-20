@@ -129,4 +129,7 @@ public class Options
 
     [Option("m3")]
     public IEnumerable<string> M3 { get; set; }
+
+    [Option("growregion")]
+    public IEnumerable<int> GrowRegion { get; set; }
 }
