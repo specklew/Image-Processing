@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.ComponentModel;
+using System.Drawing;
 using CommandLine;
 using image_processing_core;
 
@@ -104,4 +105,28 @@ public class Options
     
     [Option("orobertsi")]
     public bool RobertsOperatorI { get; set; }
+    
+    [Option("osobel")]
+    public bool SobelOperator { get; set; }
+    
+    [Option("ouolis")]
+    public bool UolisOperator { get; set; }
+
+    [Option("erode")]
+    public string Erode { get; set; }
+
+    [Option("dilate")]
+    public string Dilate { get; set; }
+
+    [Option("opening")]
+    public string Opening { get; set; }
+
+    [Option("closing")]
+    public string Closing { get; set; }
+
+    [Option("hmt")]
+    public string HitOrMiss { get; set; }
+
+    [Option("m3")]
+    public IEnumerable<string> M3 { get; set; }
 }

@@ -26,13 +26,19 @@ public static class ImageIO
         return bp;
     }
     
+    public static Bitmap PaintOn1bpp(Bitmap image)
+    {
+        Bitmap bp = image.Clone(new Rectangle(0, 0, image.Width, image.Height), PixelFormat.Format1bppIndexed);
+        return bp;
+    }
+
     public static BitmapData LockPixels(Bitmap bitmap)
     {
         BitmapData data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadWrite,
             bitmap.PixelFormat);
         return data;
     }
-
+    
     public static void SaveImage(Bitmap image, string path)
     {
         image.Save(path);

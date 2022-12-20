@@ -6,7 +6,7 @@ using task_2;
 namespace image_processing;
 
 
-[SimpleJob(launchCount: 3, warmupCount: 10, targetCount: 30)]
+[SimpleJob(launchCount: 10, warmupCount: 10, targetCount: 100)]
 [MemoryDiagnoser]
 public class ConvolutionBenchmark
 {

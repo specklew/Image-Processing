@@ -3,11 +3,11 @@ using System.Numerics;
 
 namespace image_processing_core;
 
-public readonly struct RGB64
+public struct RGB64
 {
-    public double R { get; }
-    public double G {get; }
-    public double B {get; }
+    public double R { get; private set; }
+    public double G {get; private set;}
+    public double B {get; private set;}
 
     public RGB64(double r, double g, double b)
     {
@@ -58,6 +58,11 @@ public readonly struct RGB64
         return new RGB64(left.R / scalar, left.G / scalar, left.B / scalar);
     }
     
+    public static RGB64 operator /(RGB64 left, double scalar)
+    {
+        return new RGB64(left.R / scalar, left.G / scalar, left.B / scalar);
+    }
+    
     public static RGB64 operator -(RGB64 left, RGB64 right)
     {
         return new RGB64(left.R - right.R, left.G - right.G, left.B - right.B);
@@ -71,6 +76,16 @@ public readonly struct RGB64
     public static bool operator <(RGB64 left, RGB64 right)
     {
         return left.Length() < right.Length();
+    }
+
+    public static bool operator ==(RGB64 left, RGB64 right)
+    {
+        return Math.Abs(left.R - right.R) < 0.1 && Math.Abs(left.B - right.B) < 0.1 && Math.Abs(left.G - right.G) < 0.1;
+    }
+    
+    public static bool operator !=(RGB64 left, RGB64 right)
+    {
+        return Math.Abs(left.R - right.R) > 0.1 && Math.Abs(left.B - right.B) > 0.1 && Math.Abs(left.G - right.G) > 0.1;
     }
     
 
@@ -115,6 +130,14 @@ public readonly struct RGB64
         return new RGB64(Math.Abs(R), Math.Abs(G),  Math.Abs(B));
     }
 
+    public RGB64 AddWhereZero()
+    {
+        if (R == 0) R++;
+        if (G == 0) G++;
+        if (B == 0) B++;
+        return this;
+    }
+    
     public double Length()
     {
         return Math.Sqrt(R * R + G * G + B * B);
@@ -160,7 +183,7 @@ public readonly struct RGB64
         return new RGB64(r, g, b);
     }
 
-    public unsafe void SaveToPixel(byte* pixel)
+    public readonly unsafe void SaveToPixel(byte* pixel)
     {
         var r = (byte)Math.Clamp(R, 0, 255);
         var g = (byte)Math.Clamp(G, 0, 255);
@@ -170,6 +193,9 @@ public readonly struct RGB64
         pixel[1] = g;
         pixel[0] = b;
     }
+
+    public static readonly RGB64 Black = new(0, 0, 0);
+    public static readonly RGB64 White = new(255, 255, 255);
 
     public static unsafe RGB64 ToRGB(byte* pixel)
     {

@@ -28,6 +28,14 @@ public static class ConvolutionOperations
         {-2, 4,-2},
         { 1,-2, 1}
     };
+    
+    private static readonly (int, int)[] Steps =
+    {
+        (1, 0),
+        (0, 1),
+        (-1,0),
+        (0,-1)
+    };
 
     public static Bitmap ExtractDetails(Bitmap bitmap, int kernelSelection)
     {
@@ -158,11 +166,6 @@ public static class ConvolutionOperations
     
     public static unsafe BitmapData ApplyAllocationHeavyOptimizedEdgeDetection(BitmapData data, BitmapData newData)
     {
-        var steps = new (int, int)[4];
-        steps[0] = (0,-1);
-        steps[1] = (1, 0);
-        steps[2] = (-1,0);
-        steps[3] = (0, 1);
 
         int bpp = data.Stride / data.Width;
 
@@ -176,8 +179,44 @@ public static class ConvolutionOperations
                 
                 for (var i = 0; i < 4; i++)
                 {
-                    int nx = x + steps[i].Item1;
-                    int ny = y + steps[i].Item2;
+                    int nx = x + Steps[i].Item1;
+                    int ny = y + Steps[i].Item2;
+                    
+                    if(nx < 0 || nx >= data.Width || ny < 0 || ny >= data.Height)
+                    {
+                        sum -= RGB64.ToRGB(pixel);
+                    }
+                    else
+                    {
+                        sum -= RGB64.ToRGB((byte*)data.Scan0 + ny * data.Stride + nx * bpp);
+                    }
+                }
+
+                byte* finalPixel = (byte*)newData.Scan0 + y * data.Stride + x * bpp;
+                sum.SaveToPixel(finalPixel);
+            }
+        }
+
+        return newData;
+    }
+    
+    public static unsafe BitmapData ApplyOprimizedDigonalConvolution(BitmapData data, BitmapData newData)
+    {
+
+        int bpp = data.Stride / data.Width;
+
+        for (var y = 0; y < data.Height; y++)
+        {
+            for (var x = 0; x < data.Width; x++)
+            {
+                byte* pixel = (byte*)data.Scan0 + y * data.Stride + x * bpp;
+                RGB64 sum = RGB64.ToRGB(pixel);
+                sum *= 4;
+                
+                for (var i = 0; i < 4; i++)
+                {
+                    int nx = x + Steps[i].Item1;
+                    int ny = y + Steps[i].Item2;
                     
                     if(nx < 0 || nx >= data.Width || ny < 0 || ny >= data.Height)
                     {

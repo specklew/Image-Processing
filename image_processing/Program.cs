@@ -6,6 +6,7 @@ using CommandLine;
 using image_processing_core;
 using task_1;
 using task_2;
+using task_3;
 
 namespace image_processing;
 
@@ -31,11 +32,12 @@ public static class Program
             Analysis(t, data);
             Histogram(t, data);
             Convolution(t, data, ref bitmap);
+            BasicMorphological(t, data, ref bitmap);
 
             bitmap.UnlockBits(data);
 
             // ReSharper disable once StringLiteralTypo
-            ImageIO.SaveImage(bitmap, $"{t.FilePath}\\{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.bmp");  
+            ImageIO.SaveImage(bitmap, $"{t.FilePath}\\{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.bmp");
         });
     }
 
@@ -256,7 +258,59 @@ public static class Program
         {
             bitmap = NonLinearOperations.RobertsOpeator(bitmap);
         }
+        
+        if (t.SobelOperator)
+        {
+            bitmap = NonLinearOperations.RobertsOpeator(bitmap);
+        }
+        
+        if (t.UolisOperator)
+        {
+            bitmap = NonLinearOperations.Uolis(bitmap);
+        }
 
+
+        ImageIO.LockPixels(bitmap);
+    }
+
+    private static void BasicMorphological(Options t, BitmapData data, ref Bitmap bitmap)
+    {
+        bitmap.UnlockBits(data);
+
+        if (Kernels.Contains(t.Erode))
+        {
+            bitmap = BasicMorphologicalOperations.Erode(bitmap, Kernels.GetKernel(t.Erode));
+        }
+        
+        if (Kernels.Contains(t.Dilate))
+        {
+            bitmap = BasicMorphologicalOperations.Dilate(bitmap, Kernels.GetKernel(t.Dilate));
+        }
+        
+        if (Kernels.Contains(t.Opening))
+        {
+            bitmap = BasicMorphologicalOperations.Opening(bitmap, Kernels.GetKernel(t.Opening));
+        }
+        
+        if (Kernels.Contains(t.Closing))
+        {
+            bitmap = BasicMorphologicalOperations.Closing(bitmap, Kernels.GetKernel(t.Closing));
+        }
+        
+        if (Kernels.Contains(t.HitOrMiss))
+        {
+            bitmap = BasicMorphologicalOperations.HitOrMiss(bitmap, Kernels.GetKernel(t.HitOrMiss));
+        }
+
+        List<string> m3 = new(t.M3);
+        if (m3.Count != 0)
+        {
+            if (Kernels.Contains(m3.First()))
+            {
+                bitmap = BasicMorphologicalOperations.M3(bitmap, Kernels.GetKernel(m3[0]), Int32.Parse(m3[1]), Int32.Parse(m3[2]));
+            }
+        }
+        
         ImageIO.LockPixels(bitmap);
     }
 }
