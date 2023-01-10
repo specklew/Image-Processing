@@ -146,13 +146,13 @@ public static class BasicMorphologicalOperations
                         byte* pixel = pt + data.Stride * pixelY + bpp * pixelX;
                         RGB64 rgb = RGB64.ToRGB(pixel);
                         
-                        if (rgb == RGB64.White && kernel[kx + 1, ky + 1] == 1)
+                        if (rgb == RGB64.White && kernel[ky + kernelRadius, kx + kernelRadius] == 1)
                         {
                             match = false;
                             break;
                         }
 
-                        if (rgb == RGB64.Black && kernel[kx + 1, ky + 1] == 0)
+                        if (rgb == RGB64.Black && kernel[ky + kernelRadius, kx + kernelRadius] == 0)
                         {
                             match = false;
                             break;
@@ -177,6 +177,23 @@ public static class BasicMorphologicalOperations
 
         newBitmap.UnlockBits(newData);
         return newBitmap;
+    }
+
+    public static Bitmap Complement(Bitmap bitmap)
+    {
+        var result = bitmap.Clone() as Bitmap;
+        BitmapData data = result.LockBits(new Rectangle(Point.Empty, result.Size), ImageLockMode.ReadOnly, result.PixelFormat);
+        
+        int bytes = data.Height * data.Stride;
+
+        Parallel.For(0, bytes, i =>
+        {
+            byte b = Marshal.ReadByte(data.Scan0 + i);
+            Marshal.WriteByte(data.Scan0 + i, (byte)(255 - b));
+        });
+        
+        result.UnlockBits(data);
+        return result;
     }
 
     public static Bitmap Intersection(Bitmap bitmap1, Bitmap bitmap2)
@@ -209,6 +226,12 @@ public static class BasicMorphologicalOperations
         return result;
     }
 
+    public static Bitmap Difference(Bitmap bitmap1, Bitmap bitmap2)
+    {
+        bitmap2 = Complement(bitmap2);
+        return Intersection(bitmap1, bitmap2);
+    }
+
     public static Bitmap M3(Bitmap bitmap, int[,] kernel, int x, int y)
     {
         Stopwatch stopwatch = Stopwatch.StartNew();
@@ -234,5 +257,22 @@ public static class BasicMorphologicalOperations
         Console.WriteLine("Elapsed = " + stopwatch.ElapsedMilliseconds + " ms");
 
         return result;
+    }
+
+    public static Bitmap M1(Bitmap bitmap, int[,] kernel)
+    {
+        //1st operation
+        var initial = bitmap.Clone() as Bitmap; 
+        bitmap = Difference(Dilate(bitmap, kernel), initial!);
+        
+        // //2nd operation
+        // initial = bitmap.Clone() as Bitmap;
+        // bitmap = Difference(initial!, Erode(bitmap, kernel));
+        //
+        // //3rd operation
+        // initial = bitmap.Clone() as Bitmap;
+        // bitmap = Difference(Dilate(initial!, kernel), Erode(bitmap, kernel));
+        
+        return bitmap;
     }
 }

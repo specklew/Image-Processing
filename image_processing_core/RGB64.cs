@@ -9,6 +9,13 @@ public struct RGB64
     public double G {get; private set;}
     public double B {get; private set;}
 
+    public RGB64(double intensity)
+    {
+        R = intensity;
+        G = intensity;
+        B = intensity;
+    }
+    
     public RGB64(double r, double g, double b)
     {
         R = r;

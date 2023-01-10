@@ -1,4 +1,3 @@
-using System.Collections.Concurrent;
 using System.Drawing;
 using System.Drawing.Imaging;
 using image_processing;
@@ -38,7 +37,6 @@ public static class ImageSegmentation
         return result;
     }
     
-    //TODO: Find a better way to optimize.
     private static unsafe List<(int, int)> GetRegion(Bitmap bitmap, int seedX, int seedY, int tolerance)
     {
         BitmapData data = ImageIO.LockPixels(bitmap);

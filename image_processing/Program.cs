@@ -36,6 +36,7 @@ public static class Program
             Histogram(t, data);
             Convolution(t, data, ref bitmap);
             BasicMorphological(t, data, ref bitmap);
+            FourierTransform(t, data, ref bitmap);
 
             stopwatch.Stop();
             Console.WriteLine($"The operations given took:\n{stopwatch.Elapsed:mm} minutes {stopwatch.Elapsed:ss} seconds {stopwatch.Elapsed:ff} milliseconds");
@@ -322,6 +323,29 @@ public static class Program
                 bitmap = BasicMorphologicalOperations.M3(bitmap, Kernels.GetKernel(m3[0]), Int32.Parse(m3[1]), Int32.Parse(m3[2]));
             }
         }
+
+        if (t.Complement)
+        {
+            bitmap = BasicMorphologicalOperations.Complement(bitmap);
+        }
+        
+        
+        if (t.M1 != "")
+        {
+            if (Kernels.Contains(t.M1))
+            {
+                bitmap = BasicMorphologicalOperations.M1(bitmap, Kernels.GetKernel(t.M1));
+            }
+        }
+        
+        ImageIO.LockPixels(bitmap);
+    }
+
+    private static void FourierTransform(Options t, BitmapData data, ref Bitmap bitmap)
+    {
+        bitmap.UnlockBits(data);
+        
+        
         
         ImageIO.LockPixels(bitmap);
     }

@@ -132,4 +132,13 @@ public class Options
 
     [Option("growregion")]
     public IEnumerable<int> GrowRegion { get; set; }
+
+    [Option("complement")] 
+    public bool Complement { get; set; }
+    
+    [Option("m1")]
+    public string M1 { get; set; }
+    
+    [Option("fourier")]
+    public bool Fourier { get; set; }
 }
