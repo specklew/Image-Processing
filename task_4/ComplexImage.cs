@@ -1,10 +1,11 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Numerics;
 using System.Runtime.InteropServices;
 using image_processing_core;
 
-namespace Task4;
+namespace task_4;
 
 public class ComplexImage
 {
@@ -50,7 +51,7 @@ public class ComplexImage
             {
                 IntPtr pixel = row + bpp * x;
                 byte value = Marshal.ReadByte(pixel);
-                data[y, x] = (double)value / 255;
+                data[x, y] = (double)value / 255;
             }
         }
 
@@ -62,13 +63,13 @@ public class ComplexImage
         var image = new Bitmap(_width, _height, PixelFormat.Format24bppRgb);
 
         BitmapData bits = image.LockBits(
-            new Rectangle(Point.Empty, new Size(_width, _height)), 
+            new Rectangle(0, 0, _width, _height), 
             ImageLockMode.ReadWrite, image.PixelFormat);
         
         double scale = _fourierTransformed ? Math.Sqrt( _width * _height ) : 1;
 
         var ptr = (byte*)bits.Scan0;
-        int bpp = bits.Width / bits.Stride;
+        int bpp = bits.Stride / bits.Width;
 
         for (var y = 0; y < _height; y++)
         {
@@ -76,7 +77,8 @@ public class ComplexImage
             for(var x = 0; x < _width; x++)
             {
                 byte* pixel = row + x * bpp;
-                var rgb = new RGB64(_data[y, x].Magnitude * scale * 255 );
+                var rgb = new RGB64(_data[x, y].Magnitude * scale * 255 );
+                rgb.SaveToPixel(pixel);
             }
         }
         image.UnlockBits(bits);
@@ -88,18 +90,34 @@ public class ComplexImage
     {
         if (_fourierTransformed) return;
 
-        for (var y = 0; y < _height; y++)
-        {
-            for (var k = 0; k < _width; k++)
-            {
-                var sum = new Complex(0.0, 0.0);
+        Complex[,] temp = new Complex[_width,_height];
 
-                for (var n = 0; n < _width; n++)
+        var iteration = 0;
+        
+        Parallel.For(0, _width, x =>
+        {
+            iteration++;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (var y = 0; y < _height; y++)
+            {
+                
+                for (var i = 0; i < _width; i++)
                 {
-                    var w = new Complex(Math.Cos(2 * Math.PI * n * k / _width), -Math.Sin(2 * Math.PI * n * k / _width));
-                    sum += _data[n, y] * w;
+                    for (var j = 0; j < _height; j++)
+                    {
+                        double angle = 2 * Math.PI * (x * i / _width + y * j / _height);
+                        Complex c = new Complex(Math.Cos(angle), -Math.Sin(angle));
+                        temp[x, y] += _data[i, j] * c;
+                    }
                 }
             }
-        }
+
+            stopwatch.Stop();
+            Console.WriteLine("Iteration ~= " + iteration + " elapsed = " + stopwatch.ElapsedMilliseconds + " ms");
+        });
+
+        _data = temp;
+        _fourierTransformed = true;
     }
 }

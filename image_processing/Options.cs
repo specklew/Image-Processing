@@ -141,4 +141,7 @@ public class Options
     
     [Option("fourier")]
     public bool Fourier { get; set; }
+
+    [Option("optimized")] 
+    public bool Optimized { get; set; }
 }
