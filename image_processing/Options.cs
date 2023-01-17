@@ -139,6 +139,6 @@ public class Options
     [Option("m1")]
     public string M1 { get; set; }
     
-    [Option("fourier")]
-    public bool Fourier { get; set; }
+    [Option("dft")]
+    public bool DFT { get; set; }
 }

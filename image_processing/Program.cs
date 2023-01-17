@@ -8,6 +8,7 @@ using image_processing_core;
 using task_1;
 using task_2;
 using task_3;
+using Task4;
 
 namespace image_processing;
 
@@ -344,8 +345,13 @@ public static class Program
     private static void FourierTransform(Options t, BitmapData data, ref Bitmap bitmap)
     {
         bitmap.UnlockBits(data);
-        
-        
+
+        if (t.DFT)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFT();
+            bitmap = complexImage.ToBitmap();
+        }
         
         ImageIO.LockPixels(bitmap);
     }
