@@ -28,6 +28,13 @@ public static class ConvolutionOperations
         {-2, 4,-2},
         { 1,-2, 1}
     };
+
+    private static readonly int[,] RegionWhatever =
+    {
+        {-1, 1, 1},
+        {-1,-2, 1},
+        {-1, 1, 1}
+    };
     
     private static readonly (int, int)[] Steps =
     {
@@ -234,5 +241,117 @@ public static class ConvolutionOperations
         }
 
         return newData;
+    }
+
+    public static Bitmap ApplyOptimizedBitmapConvolution(Bitmap bitmap)
+    {
+        Bitmap result = (bitmap.Clone() as Bitmap)!;
+
+        Color[] cache1 = new Color[3];
+        Color[] cache2 = new Color[3];
+
+        for (int x = 0; x < bitmap.Width; x++)
+        {
+            for (int y = 0; y < bitmap.Height; y++)
+            {
+                result = ApplyKernelToPosition(bitmap, result, x, y, ref cache1, ref cache2);
+            }
+        }
+        return result;
+    }
+
+    private static Bitmap ApplyKernelToPosition(Bitmap initial, Bitmap result, int x, int y, ref Color[] cache1, ref Color[] cache2)
+    {
+        int r = 0, g = 0, b = 0;
+
+        for (int dx = 0; dx <= 2; dx++)
+        {
+            for (int dy = 0; dy <= 2; dy++)
+            {
+                int kx = x + dx - 1;
+                int ky = y + dy - 1;
+
+                if (kx <= 0 || kx >= initial.Width || ky <= 0 || ky >= initial.Height) continue;
+                
+                /*Color pixel = initial.GetPixel(kx, ky);
+                r += pixel.R * RegionWhatever[dx, dy];
+                g += pixel.G * RegionWhatever[dx, dy];
+                b += pixel.B * RegionWhatever[dx, dy];*/
+                
+                if (dx == 0)
+                {
+                    if (cache2[dy] == Color.Black)
+                    {
+                        Color pixel = initial.GetPixel(kx, ky);
+                        cache2[dy] = pixel;
+                        r -= pixel.R;
+                        g -= pixel.G;
+                        b -= pixel.B;
+                    }
+                    else
+                    {
+                        Color pixel = cache2[dy];
+                        r -= pixel.R;
+                        g -= pixel.G;
+                        b -= pixel.B;
+                    }
+                }
+                else if (dx == 1)
+                {
+                    if (cache1[dy] == Color.Black)
+                    {
+                        Color pixel = initial.GetPixel(kx, ky);
+                        cache2[dy] = pixel; 
+                        r += pixel.R;
+                        g += pixel.G;
+                        b += pixel.B;
+                    }
+                    else
+                    {
+                        Color pixel = cache1[dy];
+                        cache2[dy] = cache1[dy]; 
+                        r += pixel.R;
+                        g += pixel.G;
+                        b += pixel.B;
+                    }
+                }
+                else
+                {
+                    Color pixel = initial.GetPixel(kx, ky);
+                    cache1[dy] = pixel;
+                    r += pixel.R;
+                    g += pixel.G;
+                    b += pixel.B;
+                }
+
+                if (dx == 1 && dy == 1)
+                {
+                    if (cache1[dy] == Color.Black)
+                    {
+                        Color pixel = initial.GetPixel(kx, ky);
+                        cache2[dy] = pixel; 
+                        r -= pixel.R * 3;
+                        g -= pixel.G * 3;
+                        b -= pixel.B * 3;
+                    }
+                    else
+                    {
+                        Color pixel = cache1[dy];
+                        cache2[dy] = cache1[dy];
+                        r -= pixel.R * 3;
+                        g -= pixel.G * 3;
+                        b -= pixel.B * 3;
+                    }
+                }
+            }
+        }
+
+        r = Math.Clamp(r, 0, 255);
+        g = Math.Clamp(g, 0, 255);
+        b = Math.Clamp(b, 0, 255);
+        
+        result.SetPixel(x, y, Color.FromArgb(r, g, b));
+        
+        return result;
     }
 }
