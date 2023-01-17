@@ -141,4 +141,31 @@ public class Options
     
     [Option("dft")]
     public bool DFT { get; set; }
+    
+    [Option("fft")]
+    public bool FFT { get; set; }
+    
+    [Option("idft")]
+    public bool IDFT { get; set; }
+    
+    [Option("ifft")]
+    public bool IFFT { get; set; }
+    
+    [Option("lowpass")]
+    public int LowPass { get; set; }
+    
+    [Option("highpass")]
+    public int HighPass { get; set; }
+    
+    [Option("bandcut")]
+    public Point BandCut { get; set; }
+    
+    [Option("bandpass")]
+    public Point BandPass { get; set; }
+    
+    [Option("phase")]
+    public Point Phase { get; set; }
+
+    [Option("highpassedge")] 
+    public string HighPassEdge { get; set; } = "empty";
 }

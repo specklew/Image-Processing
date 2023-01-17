@@ -1,6 +1,6 @@
 using System.Numerics;
 
-namespace Task4;
+namespace task_4;
 
 public static class MathHelper
 {

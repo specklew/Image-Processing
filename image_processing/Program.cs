@@ -8,7 +8,7 @@ using image_processing_core;
 using task_1;
 using task_2;
 using task_3;
-using Task4;
+using task_4;
 
 namespace image_processing;
 
@@ -349,8 +349,83 @@ public static class Program
         if (t.DFT)
         {
             ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformDFT();
+            complexImage.SwapQuarters();
+            bitmap = complexImage.VisualizeFourierSpectrum();
+        }
+        
+        if (t.FFT)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
             complexImage.PerformFFT();
-            bitmap = complexImage.ToBitmap();
+            complexImage.SwapQuarters();
+            bitmap = complexImage.VisualizeFourierSpectrum();
+        }
+        
+        if (t.IDFT)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformDFT();
+            bitmap = complexImage.InvertDFT();
+        }
+        
+        if (t.IFFT)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFT();
+            bitmap = complexImage.InvertFFT();
+        }
+        
+        if (t.LowPass != default)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFT();
+            complexImage.LowpassFilter(t.LowPass);
+            bitmap = complexImage.InvertFFT();
+        }
+        
+        if (t.HighPass != default)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFT();
+            complexImage.HighpassFilter(t.HighPass);
+            bitmap = complexImage.InvertFFT();
+        }
+
+        if (t.BandCut != default)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFT();
+            complexImage.BandCutFilter(t.BandCut.X, t.BandCut.Y);
+            bitmap = complexImage.InvertFFT();
+        }
+        
+
+        if (t.BandPass != default)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFT();
+            complexImage.BandPassFilter(t.BandPass.X, t.BandPass.Y);
+            bitmap = complexImage.InvertFFT();
+        }
+        
+
+        if (t.Phase != default)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFT();
+            complexImage.PhaseModifyingFilter(t.Phase.X, t.Phase.Y);
+            bitmap = complexImage.InvertFFT();
+        }
+        
+
+        if (t.HighPassEdge != "empty")
+        {
+            Bitmap mask = ImageIO.LoadImage($"{t.HighPassEdge}");
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFT();
+            complexImage.HighpassFilterWithEdgeDetection(mask);
+            bitmap = complexImage.InvertFFT();
         }
         
         ImageIO.LockPixels(bitmap);
