@@ -5,7 +5,7 @@ namespace task_4;
 
 public partial class ComplexImage
 {
-    public void LowpassFilter(int threshold)
+    public void LowpassFilter(double threshold)
     {
         if (!_fourierTransformed) throw new InvalidOperationException();
 
@@ -24,7 +24,7 @@ public partial class ComplexImage
     }
     
     
-    public void HighpassFilter(int threshold)
+    public void HighpassFilter(double threshold)
     {
         if (!_fourierTransformed) throw new InvalidOperationException();
 
@@ -44,7 +44,7 @@ public partial class ComplexImage
     }
     
     
-    public void BandCutFilter(int lowThreshold, int highThreshold)
+    public void BandCutFilter(double lowThreshold, double highThreshold)
     {
         if (!_fourierTransformed) throw new InvalidOperationException();
 
@@ -62,7 +62,7 @@ public partial class ComplexImage
         }
     }
     
-    public void BandPassFilter(int lowThreshold, int highThreshold)
+    public void BandPassFilter(double lowThreshold, double highThreshold)
     {
         if (!_fourierTransformed) throw new InvalidOperationException();
 
@@ -89,7 +89,7 @@ public partial class ComplexImage
         }
     }
     
-    public void PhaseModifyingFilter(double k, double l)
+    public void PhaseModifyingFilter(int k, int l)
     {
         if (!_fourierTransformed) throw new InvalidOperationException();
 

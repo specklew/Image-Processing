@@ -14,7 +14,7 @@ public partial class ComplexImage
 
         for (var x = 0; x < _width; x++)
         {
-            Complex[] xData = new Complex[_width];
+            var xData = new Complex[_width];
 
             for (var y = 0; y < _height; y++)
             {
@@ -26,11 +26,11 @@ public partial class ComplexImage
         
         for (var y = 0; y < _height; y++)
         {
-            Complex[] yData = new Complex[_height];
+            var yData = new Complex[_height];
 
             for (var x = 0; x < _width; x++)
             {
-                yData[x] = temp[x][y];
+                yData[x] = temp[x][y] / Math.Sqrt(_width);
             }
 
             result.Add(FFTFrequency(yData).ToList());
@@ -42,7 +42,49 @@ public partial class ComplexImage
             for (var y = 0; y < list.Count; y++)
             {
                 Complex complex = list[y];
-                _data[x, y] = complex;
+                _data[x, y] = complex / Math.Sqrt(_height);
+            }
+        }
+
+        _fourierTransformed = true;
+    }
+    
+    public void PerformFFTUsingSpatial()
+    {
+        List<List<Complex>> result = new();
+        List<List<Complex>> temp = new();
+
+        for (var x = 0; x < _width; x++)
+        {
+            var xData = new Complex[_width];
+
+            for (var y = 0; y < _height; y++)
+            {
+                xData[y] = _data[x, y];
+            }
+
+            temp.Add(FFTSpatial(xData).ToList());
+        }
+        
+        for (var y = 0; y < _height; y++)
+        {
+            var yData = new Complex[_height];
+
+            for (var x = 0; x < _width; x++)
+            {
+                yData[x] = temp[x][y] / Math.Sqrt(_width);
+            }
+
+            result.Add(FFTSpatial(yData).ToList());
+        }
+
+        for (var x = 0; x < result.Count; x++)
+        {
+            List<Complex> list = result[x];
+            for (var y = 0; y < list.Count; y++)
+            {
+                Complex complex = list[y];
+                _data[x, y] = complex / Math.Sqrt(_height);
             }
         }
 
@@ -56,10 +98,10 @@ public partial class ComplexImage
             return signal;
         }
 
-        Complex[] result = new Complex[signal.Length];
+        var result = new Complex[signal.Length];
 
-        Complex[] even = new Complex[signal.Length / 2];
-        Complex[] odd = new Complex[signal.Length / 2];
+        var even = new Complex[signal.Length / 2];
+        var odd = new Complex[signal.Length / 2];
 
 
         for (var i = 0; i < signal.Length / 2; i++)
@@ -80,6 +122,37 @@ public partial class ComplexImage
 
         return result;
     }
+
+    private Complex[] FFTSpatial(Complex[] signal)
+    {
+        if (signal.Length == 1)
+        {
+            return signal;
+        }
+
+        var result = new Complex[signal.Length];
+
+        var even = new Complex[signal.Length / 2];
+        var odd = new Complex[signal.Length / 2];
+
+        for (var i = 0; i < signal.Length / 2; i++)
+        {
+            even[i] = signal[2 * i];
+            odd[i] = signal[2 * i + 1];
+        }
+
+        even = FFTSpatial(even);
+        odd = FFTSpatial(odd);
+        
+        for (var i = 0; i < signal.Length / 2; i++)
+        {
+            var number = new Complex(Math.Cos(2 * Math.PI * i / signal.Length), -Math.Sin(2 * Math.PI * i / signal.Length));
+            result[i] = even[i] + number * odd[i];
+            result[i + signal.Length / 2] = even[i] - number * odd[i];
+        }
+
+        return result;
+    }
     
     public unsafe Bitmap InvertFFT()
     {
@@ -96,7 +169,7 @@ public partial class ComplexImage
 
         for (var y = 0; y < _height; y++)
         {
-            Complex[] yData = new Complex[_height];
+            var yData = new Complex[_height];
 
             for (var x = 0; x < _width; x++)
             {
@@ -113,7 +186,7 @@ public partial class ComplexImage
 
         for (var x = 0; x < _width; x++)
         {
-            Complex[] xData = new Complex[_height];
+            var xData = new Complex[_height];
 
             for (var y = 0; y < _width; y++)
             {
@@ -140,10 +213,10 @@ public partial class ComplexImage
             return signal;
         }
 
-        Complex[] result = new Complex[signal.Length];
+        var result = new Complex[signal.Length];
 
-        Complex[] even = new Complex[signal.Length / 2];
-        Complex[] odd = new Complex[signal.Length / 2];
+        var even = new Complex[signal.Length / 2];
+        var odd = new Complex[signal.Length / 2];
 
         for (var i = 0; i < signal.Length / 2; i++)
         {

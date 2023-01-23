@@ -168,4 +168,10 @@ public class Options
 
     [Option("highpassedge")] 
     public string HighPassEdge { get; set; } = "empty";
+    
+    [Option("spatial")] 
+    public bool Spatial { get; set; }
+    
+    [Option("test")]
+    public bool Test { get; set; }
 }

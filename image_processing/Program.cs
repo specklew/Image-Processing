@@ -27,7 +27,7 @@ public static class Program
             
             Bitmap bitmap = ImageIO.LoadImage($"{t.FilePath}\\noise.bmp");
             BitmapData data = ImageIO.LockPixels(bitmap);
-            
+
             Stopwatch stopwatch = Stopwatch.StartNew();
             
             Elementary(t, data);
@@ -342,6 +342,7 @@ public static class Program
         ImageIO.LockPixels(bitmap);
     }
 
+    [SuppressMessage("ReSharper.DPA", "DPA0001: Memory allocation issues")]
     private static void FourierTransform(Options t, BitmapData data, ref Bitmap bitmap)
     {
         bitmap.UnlockBits(data);
@@ -421,11 +422,33 @@ public static class Program
 
         if (t.HighPassEdge != "empty")
         {
-            Bitmap mask = ImageIO.LoadImage($"{t.HighPassEdge}");
+            Bitmap mask = ImageIO.LoadImage($"{t.FilePath}\\{t.HighPassEdge}");
             ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
             complexImage.PerformFFT();
             complexImage.HighpassFilterWithEdgeDetection(mask);
             bitmap = complexImage.InvertFFT();
+        }
+
+        if (t.Spatial)
+        {
+            ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+            complexImage.PerformFFTUsingSpatial();
+            complexImage.SwapQuarters();
+            bitmap = complexImage.VisualizeFourierSpectrum();
+        }
+
+        if (t.Test)
+        {
+            for (double i = 290; i < 362; i+=10)
+            {
+                double l = i;
+                double h = i + 10;
+                ComplexImage complexImage = ComplexImage.FromBitmap(bitmap);
+                complexImage.PerformFFT();
+                complexImage.BandPassFilter(l, h);
+                ImageIO.SaveImage(complexImage.InvertFFT(), $"{t.FilePath}\\FourierBandcut_{l}_{h}.bmp");
+
+            }
         }
         
         ImageIO.LockPixels(bitmap);

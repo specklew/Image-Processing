@@ -23,15 +23,17 @@ public partial class ComplexImage
         _width = width;
         _height = height;
         
-        _data = new Complex[height, width];
+        _data = new Complex[width, height];
         _fourierTransformed = false;
     }
 
     public static ComplexImage FromBitmap(Bitmap image)
     {
-        var data = image.LockBits(new Rectangle(Point.Empty, image.Size), ImageLockMode.ReadOnly, image.PixelFormat);
+        BitmapData data = image.LockBits(new Rectangle(Point.Empty, image.Size), ImageLockMode.ReadOnly, image.PixelFormat);
 
-        var complexImage = FromBitmap(data);
+        ComplexImage complexImage = FromBitmap(data);
+        
+        image.UnlockBits(data);
 
         return complexImage;
     }
@@ -39,18 +41,17 @@ public partial class ComplexImage
     public static ComplexImage FromBitmap(BitmapData imageData)
     {
         var complexImage = new ComplexImage( imageData.Width, imageData.Height );
-        Complex[,] data = complexImage._data;
-
-        var ptr = imageData.Scan0;
+        
+        IntPtr ptr = imageData.Scan0;
         int bpp = imageData.Stride / imageData.Width;
         for (var y = 0; y < imageData.Height; y++)
         {
-            var row = ptr + y * imageData.Stride;
+            IntPtr row = ptr + y * imageData.Stride;
             for (var x = 0; x < imageData.Width; x++)
             {
-                var pixel = row + bpp * x;
+                IntPtr pixel = row + bpp * x;
                 byte value = Marshal.ReadByte(pixel);
-                data[x,y] = (double)value / 255;
+                complexImage._data[x,y] = (double)value;
             }
         }
 
@@ -61,12 +62,12 @@ public partial class ComplexImage
     {
         if (_fourierTransformed)
         {
-            return InvertDFT();
+            return InvertFFT();
         }
         
         var image = new Bitmap(_width, _height, PixelFormat.Format24bppRgb);
 
-        var bits = image.LockBits(
+        BitmapData bits = image.LockBits(
             new Rectangle(Point.Empty, new Size(_width, _height)), 
             ImageLockMode.ReadWrite, image.PixelFormat);
 
@@ -79,7 +80,7 @@ public partial class ComplexImage
             for(var x = 0; x < _width; x++)
             {
                 byte* pixel = row + x * bpp;
-                var rgb = new RGB64(_data[x,y].Magnitude * 255);
+                var rgb = new RGB64(_data[x,y].Magnitude);
                 rgb.SaveToPixel(pixel);
             }
         }
