@@ -77,13 +77,14 @@ public partial class ComplexImage
         float scaleX = _width / (float)mask.Width;
         float scaleY = _height / (float)mask.Height;
 
+        //TODO: Investigate value swap
         for (var x = 0; x < _width; x++)
         {
             for (var y = 0; y < _height; y++)
             {
                 if (mask.GetPixel((int)(x / scaleX), (int)(y / scaleY)).R == 0)
                 {
-                    _data[x, y] = new Complex(0, 0);
+                    _data[_height - 1 - y, x] = new Complex(0, 0);
                 }
             }
         }
